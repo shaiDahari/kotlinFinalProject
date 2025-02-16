@@ -1,69 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/recommendedMoviesFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.nsamovie.ui.main.RecommendedMoviesFragment"
-        android:label="@string/app_name"
-        tools:layout="@layout/fragment_recommended_movies">
+        android:id="@+id/recommendedMoviesFragment"
+        android:name="com.example.nsamovie.ui.recommended.RecommendedMoviesFragment"
+        android:label="@string/recommended_movies"
+        tools:layout="@layout/fragment_recommended_movies" >
         <action
-            android:id="@+id/action_mainFragment_to_addEditMovieFragment"
-            app:destination="@id/addEditMovieFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            android:id="@+id/action_recommendedMoviesFragment_to_ratingsFragment"
+            app:destination="@id/ratingsFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_movieDetailsFragment"
-            app:destination="@id/movieDetailsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right">
-            <argument
-                android:name="movieId"
-                app:argType="integer" />
-        </action>
+            android:id="@+id/action_recommendedMoviesFragment_to_searchMoviesFragment"
+            app:destination="@id/searchMoviesFragment" />
+        <action
+            android:id="@+id/action_recommendedMoviesFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/addEditMovieFragment"
-        android:name="com.example.nsamovie.ui.addedit.SearchMoviesFragment"
-        android:label="@string/app_name"
-        tools:layout="@layout/fragment_search_movies">
-        <argument
-            android:name="movieId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.nsamovie.ui.favorites.FavoritesFragment"
+        android:label="@string/favorites_movies"
+        tools:layout="@layout/fragment_favorites" />
+
+    <fragment
+        android:id="@+id/ratingsFragment"
+        android:name="com.example.nsamovie.ui.ratings.RatingsFragment"
+        android:label="@string/ratings_and_reviews"
+        tools:layout="@layout/fragment_ratings" >
         <action
-            android:id="@+id/action_addEditMovieFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_in_right"
-            app:popEnterAnim="@anim/slide_out_right"
-            app:popExitAnim="@anim/slide_out_left" />
+            android:id="@+id/action_ratingsFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/movieDetailsFragment"
-        android:name="com.example.nsamovie.ui.details.RatingsFragment"
-        android:label="@string/app_name"
-        tools:layout="@layout/fragment_ratings">
-        <argument
-            android:name="movieId"
-            app:argType="integer" />
+        android:id="@+id/searchMoviesFragment"
+        android:name="com.example.nsamovie.ui.search.SearchMoviesFragment"
+        android:label="@string/search_movies"
+        tools:layout="@layout/fragment_search_movies" >
         <action
-            android:id="@+id/action_movieDetailsFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
-            android:id="@+id/action_movieDetailsFragment_to_addEditMovieFragment"
-            app:destination="@id/addEditMovieFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            android:id="@+id/action_searchMoviesFragment_to_ratingsFragment"
+            app:destination="@id/ratingsFragment" />
     </fragment>
+
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.nsamovie.ui.addedit
+package com.example.nsamovie.ui.search
 
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.nsamovie.R
 import com.example.nsamovie.databinding.FragmentSearchMoviesBinding
-import com.example.nsamovie.model.Movie
+import com.example.nsamovie.data.model.Movie
 import com.example.nsamovie.ui.viewmodel.MoviesViewModel
 import java.util.*
 

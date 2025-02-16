@@ -4,8 +4,8 @@ package com.example.nsamovie.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.nsamovie.data.model.Category
 import com.example.nsamovie.databinding.ItemCategoryBinding
-import com.example.nsamovie.model.Category
 
 class CategoryAdapter(
     private val categories: List<Category>,
@@ -29,8 +29,10 @@ class CategoryAdapter(
             binding.textViewCategoryTitle.text = category.categoryName
 
             // יצירת מתאם חדש לכל רשימת סרטים אופקית
-            val movieAdapter = MoviesHorizontalAdapter(category.movies) { movie ->
-                onMovieClick(movie.id)
+            val movieAdapter = MoviesHorizontalAdapter(category.movies) {
+                onMovieClick(
+                    it.id
+                )
             }
 
             binding.recyclerViewMovies.adapter = movieAdapter

@@ -1,10 +1,10 @@
-package com.example.nsamovie.ui.details
-
+package com.example.nsamovie.ui.ratings
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -41,22 +41,27 @@ class RatingsFragment : Fragment() {
             movie?.let {
                 binding.apply {
                     textViewMovieTitle.text = movie.title
-                    textViewMovieDirector.text = movie.director
-                    ratingBar.rating = movie.rating
-                    textViewMovieDescription.text = movie.description
-                    textViewMovieGenre.text = movie.genre
+                    textViewMovieDirector.text = getString(R.string.movie_director, movie.director) // Director display
+                    textViewMovieReleaseDate.text = getString(R.string.movie_release_date, movie.releaseDate) // Release Date display
+                    textViewMovieGenre.text = getString(R.string.genre, movie.genre.joinToString(", "))
+                    textViewMovieDescription.text = movie.description ?: getString(R.string.no_description)
+                    textViewRating.text = movie.rating
+
+                    // Load poster if available
                     movie.posterPath?.let { poster ->
                         imageViewPoster.setImageURI(poster.toUri())
-                    }
+                    } ?: imageViewPoster.setImageResource(R.drawable.ic_movie_placeholder)
+
+                    // Set toggle button state
+                    toggleFavorite.isChecked = movie.favorites
                 }
             }
         }
     }
 
     private fun setupListeners() {
-        binding.buttonEditMovie.setOnClickListener {
-            val action = RatingsFragmentDirections.actionRatingsFragmentToSearchMoviesFragment(args.movieId)
-            findNavController().navigate(action)
+        binding.toggleFavorite.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateFavoriteStatus(args.movieId, isChecked)
         }
     }
 

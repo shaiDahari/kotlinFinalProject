@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="8dp"
-    android:background="@color/black">
+    android:background="@color/black"
+    tools:context=".ui.recommended.RecommendedMoviesFragment">
 
     <!-- כותרת של המסך -->
     <TextView
@@ -19,13 +21,46 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp" />
 
-    <!-- רשימה ראשית של קטגוריות סרטים -->
+    <!-- רשימה של סרטים -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewCategories"
+        android:id="@+id/recyclerViewMovies"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:paddingTop="8dp"
         android:clipToPadding="false"
         android:scrollbars="none"
         android:overScrollMode="never"/>
+
+    <!-- כפתור חיפוש סרטים -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="8dp">
+
+        <Button
+            android:id="@+id/btnSearchMovies"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/search_movies"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
+            android:padding="12dp"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btnFavorites"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/favorites"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
+            android:padding="12dp"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
 </LinearLayout>

@@ -1,5 +1,4 @@
-package com.example.nsamovie.ui.favorite
-
+package com.example.nsamovie.ui.recommended
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,14 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.nsamovie.databinding.FragmentFavoritesBinding
+import com.example.nsamovie.R
+import com.example.nsamovie.databinding.FragmentRecommendedMoviesBinding
 import com.example.nsamovie.ui.adapter.MovieAdapter
 import com.example.nsamovie.ui.viewmodel.MoviesViewModel
 
-class FavoritesFragment : Fragment() {
+class RecommendedMoviesFragment : Fragment() {
 
-    private var _binding: FragmentFavoritesBinding? = null
+    private var _binding: FragmentRecommendedMoviesBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MoviesViewModel by viewModels()
@@ -24,7 +25,7 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        _binding = FragmentRecommendedMoviesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -33,23 +34,38 @@ class FavoritesFragment : Fragment() {
 
         setupRecyclerView()
         setupObservers()
+        setupListeners()
     }
 
     private fun setupRecyclerView() {
         movieAdapter = MovieAdapter(
-            onMovieClick = { /* לא מבצע ניווט, אלא רק הצגה */ },
+            onMovieClick = { movie ->
+                val action = RecommendedMoviesFragmentDirections
+                    .actionRecommendedMoviesFragmentToRatingsFragment(movie.id)
+                findNavController().navigate(action)
+            },
             onDeleteClick = { movie -> viewModel.delete(movie) }
         )
 
-        binding.recyclerViewFavorites.apply {
+        binding.recyclerViewMovies.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = movieAdapter
         }
     }
 
     private fun setupObservers() {
-        viewModel.favoriteMovies.observe(viewLifecycleOwner) { movies ->
+        viewModel.allMovies.observe(viewLifecycleOwner) { movies ->
             movieAdapter.submitList(movies)
+        }
+    }
+
+    private fun setupListeners() {
+        binding.btnSearchMovies.setOnClickListener {
+            findNavController().navigate(R.id.action_recommendedMoviesFragment_to_searchMoviesFragment)
+        }
+
+        binding.btnFavorites.setOnClickListener {
+            findNavController().navigate(R.id.action_recommendedMoviesFragment_to_favoritesFragment)
         }
     }
 
