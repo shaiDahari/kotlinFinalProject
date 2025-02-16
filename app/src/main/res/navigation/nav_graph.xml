@@ -6,9 +6,9 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.nsamovie.ui.main.MainFragment"
+        android:name="com.example.nsamovie.ui.main.RecommendedMoviesFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_main">
+        tools:layout="@layout/fragment_recommended_movies">
         <action
             android:id="@+id/action_mainFragment_to_addEditMovieFragment"
             app:destination="@id/addEditMovieFragment"
@@ -31,9 +31,9 @@
 
     <fragment
         android:id="@+id/addEditMovieFragment"
-        android:name="com.example.nsamovie.ui.addedit.AddEditMovieFragment"
+        android:name="com.example.nsamovie.ui.addedit.SearchMoviesFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_add_edit_movie">
+        tools:layout="@layout/fragment_search_movies">
         <argument
             android:name="movieId"
             app:argType="integer"
@@ -49,9 +49,9 @@
 
     <fragment
         android:id="@+id/movieDetailsFragment"
-        android:name="com.example.nsamovie.ui.details.MovieDetailsFragment"
+        android:name="com.example.nsamovie.ui.details.RatingsFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_movie_details">
+        tools:layout="@layout/fragment_ratings">
         <argument
             android:name="movieId"
             app:argType="integer" />
