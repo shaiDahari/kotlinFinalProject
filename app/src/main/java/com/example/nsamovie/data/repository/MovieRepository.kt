@@ -1,25 +1,25 @@
 package com.example.nsamovie.data.repository
 
-import androidx.lifecycle.LiveData
+
 import com.example.nsamovie.data.local_db.MovieDao
 import com.example.nsamovie.data.model.Movie
+import com.example.nsamovie.data.remote.MovieApiService
 
-class MovieRepository(private val movieDao: MovieDao) {
-    val allMovies: LiveData<List<Movie>> = movieDao.getAllMovies()
+class MovieRepository(private val movieDao: MovieDao, private val apiService: MovieApiService) {
 
-    suspend fun insert(movie: Movie) {
-        movieDao.insertMovie(movie)
+    suspend fun getRecommendedMovies(): List<Movie> {
+        return apiService.getRecommendedMovies()
     }
 
-    suspend fun update(movie: Movie) {
-        movieDao.updateMovie(movie)
+    suspend fun getSearchResults(query: String): List<Movie> {
+        return apiService.searchMovies(query)
+    }
+
+    suspend fun insert(movie: Movie) {
+        movieDao.insert(movie)
     }
 
     suspend fun delete(movie: Movie) {
-        movieDao.deleteMovie(movie)
-    }
-
-    suspend fun getMovieById(id: Int): Movie? {
-        return movieDao.getMovieById(id)
+        movieDao.delete(movie)
     }
 }
