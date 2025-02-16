@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General UI Texts -->
+    <string name="app_name">Naor.Shai.Adane</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Screen Titles -->
+    <string name="title_add_movie">Add Movie</string>
+    <string name="title_edit_movie">Edit Movie</string>
+    <string name="title_movie_details">Movie Details</string>
+    <string name="title_movie_list">Movie List</string>
+
+    <!-- Movie Fields -->
+    <string name="movie_title">Movie Title</string>
+    <string name="movie_director">Director</string>
+    <string name="movie_release_date">Release date</string>
+    <string name="movie_description">Description</string>
+    <string name="movie_rating">Rating</string>
+    <string name="movie_poster">Poster</string>
+
+
+    <string name="hint_movie_title">Enter the movie title</string>
+    <string name="hint_movie_genre">Enter the movie genre</string>
+    <string name="hint_movie_director">Enter the director\'s name</string>
+    <string name="hint_movie_release_date">Enter the release year</string>
+    <string name="hint_movie_description">Write a short description</string>
+    <string name="hint_movie_rating">Give a rating (1–5)</string>
+
+    <!-- Error Messages -->
+    <string name="error_empty_title">Please enter a title</string>
+    <string name="error_empty_director">Please enter a director</string>
+    <string name="error_invalid_date">Please select a valid date</string>
+
+    <!-- Action Buttons -->
+    <string name="action_save">Save</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_add">Add New</string>
+    <string name="add_poster">Add Poster</string>
+    <string name="action_details">View Details</string>
+
+    <!-- Feedback Messages -->
+    <string name="msg_save_success">Movie saved successfully!</string>
+    <string name="msg_edit_success">Movie edited successfully!</string>
+    <string name="msg_delete_success">Movie deleted successfully!</string>
+    <string name="msg_error">An error occurred. Please try again.</string>
+    <string name="msg_poster_added">Poster added successfully!</string>
+    <string name="delete_confirmation_title">"Are you sure you want to delete? "</string>
+    <string name="gallery_access_required">Gallery access is required to select a poster</string>
+
+    <!--  fragment labels -->
+    <string name="main_fragment">Main Fragment</string>
+    <string name="add_edit_movie">Add/Edit Movie</string>
+    <string name="movie_details">Movie Details</string>
+
+
+</resources>
