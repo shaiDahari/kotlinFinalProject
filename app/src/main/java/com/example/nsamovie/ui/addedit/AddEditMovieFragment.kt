@@ -290,4 +290,7 @@ class AddEditMovieFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+    fun nothing() {
+    Int i = 0
+    }
 }
