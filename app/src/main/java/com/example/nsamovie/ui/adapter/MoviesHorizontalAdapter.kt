@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nsamovie.databinding.ItemMovieBinding
-import com.example.nsamovie.model.Movie
+import com.example.nsamovie.data.model.Movie
 
 class MoviesHorizontalAdapter(
     private val movies: List<Movie>,
@@ -26,8 +26,8 @@ class MoviesHorizontalAdapter(
 
     inner class MovieViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
-            binding.textViewMovieTitle.text = movie.title
-            binding.imageViewPoster.setImageURI(movie.posterUri?.let { android.net.Uri.parse(it) })
+            binding.movieTitle.text = movie.title
+            binding.moviePoster.setImageURI(movie.posterPath?.let { android.net.Uri.parse(it) })
             binding.root.setOnClickListener { onMovieClick(movie) }
         }
     }

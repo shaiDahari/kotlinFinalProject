@@ -10,9 +10,6 @@ import com.example.nsamovie.R
 import com.example.nsamovie.data.model.Movie
 import com.example.nsamovie.databinding.ItemMovieBinding
 
-/**
- * Adapter לניהול רשימת הסרטים ב-RecyclerView
- */
 class MovieAdapter(
     private val onMovieClick: (Movie) -> Unit,
     private val onDeleteClick: (Movie) -> Unit
@@ -32,40 +29,29 @@ class MovieAdapter(
         holder.bind(movie)
     }
 
-    /**
-     * ViewHolder לניהול הנתונים של כל פריט ברשימה
-     */
     inner class MovieViewHolder(private val binding: ItemMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
             binding.apply {
-                // עדכון ה-UI עם נתוני הסרט
-                textViewMovieTitle.text = movie.title
-                textViewMovieDirector.text = movie.director
-                textViewMovieGenre.text = movie.genre
-                ratingBar.rating = movie.rating
+                movieTitle.text = movie.title
+                movieDirector.text = movie.director
+                movieGenre.text = movie.genre.toString()
+                movieRatingText.text = movie.rating.toString()
 
-                // הצגת תמונת הסרט
                 if (!movie.posterPath.isNullOrEmpty()) {
-                    imageViewPoster.setImageURI(Uri.parse(movie.posterPath))
+                    moviePoster.setImageURI(Uri.parse(movie.posterPath))
                 } else {
-                    imageViewPoster.setImageResource(R.drawable.ic_movie_placeholder)
+                    moviePoster.setImageResource(R.drawable.ic_movie_placeholder)
                 }
 
-                // האזנה ללחיצה על הפריט להצגת פרטים
                 root.setOnClickListener { onMovieClick(movie) }
-
-                // האזנה ללחיצה על כפתור המחיקה
-                buttonDeleteMovie.setOnClickListener { onDeleteClick(movie) }
+                btnDelete.setOnClickListener { onDeleteClick(movie) }
             }
         }
     }
 }
 
-/**
- * DiffUtil לשיפור ביצועים ברשימה (בודק הבדלים בין רשימות ומעדכן רק את מה שהשתנה)
- */
 class MovieDiffCallback : DiffUtil.ItemCallback<Movie>() {
     override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
         oldItem.id == newItem.id

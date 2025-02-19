@@ -3,15 +3,15 @@
 
     <style name="Theme.NsaMovie" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary Colors -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/primary_variant</item>
-        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorPrimary">@color/light_blue</item>
+        <item name="colorPrimaryVariant">@color/blue</item>
+        <item name="colorSecondary">@color/cyan</item>
 
         <!-- Status Bar Color -->
-        <item name="android:statusBarColor">@color/primary_variant</item>
+        <item name="android:statusBarColor">@color/blue</item>
 
         <!-- Background -->
-        <item name="android:windowBackground">@color/background</item>
+        <item name="android:windowBackground">@color/white</item>
         <!-- Localization -->
         <item name="android:layoutDirection">locale</item>
     </style>

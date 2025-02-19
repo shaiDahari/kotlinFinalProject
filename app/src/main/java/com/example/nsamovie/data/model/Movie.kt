@@ -13,5 +13,6 @@ data class Movie(
     val releaseDate: String,
     val posterPath: String? = null,
     val rating: Float = 0f,
-    val description: String? = null
+    val description: String? = null,
+    val favorites: Boolean = false
 )

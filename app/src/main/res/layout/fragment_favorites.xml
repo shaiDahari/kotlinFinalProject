@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +8,7 @@
     android:padding="8dp"
     tools:context=".ui.favorites.FavoritesFragment">
 
-    <!-- כותרת רשימת הסרטים המועדפים -->
+    <!-- Title of the favorite movies list -->
     <TextView
         android:id="@+id/textViewFavoritesTitle"
         android:layout_width="wrap_content"
@@ -20,12 +19,11 @@
         android:textColor="@color/white"
         android:layout_marginBottom="8dp"/>
 
-    <!-- תצוגת הסרטים המועדפים -->
+    <!-- RecyclerView for displaying favorite movies -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFavorites"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="8dp"
         android:nestedScrollingEnabled="false"/>
-
 </LinearLayout>

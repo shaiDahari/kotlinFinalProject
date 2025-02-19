@@ -3,9 +3,9 @@ package com.example.nsamovie.data.repository
 
 import com.example.nsamovie.data.local_db.MovieDao
 import com.example.nsamovie.data.model.Movie
-import com.example.nsamovie.data.remote.MovieApiService
+import com.example.nsamovie.network.TMDBApiService
 
-class MovieRepository(private val movieDao: MovieDao, private val apiService: MovieApiService) {
+class MovieRepository(private val movieDao: MovieDao, private val apiService: TMDBApiService) {
 
     suspend fun getRecommendedMovies(): List<Movie> {
         return apiService.getRecommendedMovies()
@@ -15,11 +15,11 @@ class MovieRepository(private val movieDao: MovieDao, private val apiService: Mo
         return apiService.searchMovies(query)
     }
 
-    suspend fun insert(movie: Movie) {
-        movieDao.insert(movie)
+    suspend fun insertMovie(movie: Movie) {
+        movieDao.insertMovie(movie)
     }
 
-    suspend fun delete(movie: Movie) {
-        movieDao.delete(movie)
+    suspend fun deleteMovie(movie: Movie) {
+        movieDao.deleteMovie(movie)
     }
 }
