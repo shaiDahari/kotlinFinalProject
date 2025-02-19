@@ -8,8 +8,8 @@ import androidx.room.TypeConverters
 import com.example.nsamovie.data.model.Movie
 
 @Database(entities = [Movie::class], version = 1, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class MovieDatabase : RoomDatabase() {
-
     abstract fun movieDao(): MovieDao
 
     companion object {
@@ -28,10 +28,4 @@ abstract class MovieDatabase : RoomDatabase() {
             }
         }
     }
-    @Database(entities = [Movie::class], version = 1, exportSchema = false)
-    @TypeConverters(Converters::class) // הוספת ה-Converter לשימוש
-    abstract class MovieDatabase : RoomDatabase() {
-        abstract fun movieDao(): MovieDao
-    }
-
 }

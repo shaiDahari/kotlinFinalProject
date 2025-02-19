@@ -31,6 +31,9 @@
         android:name="com.example.nsamovie.ui.ratings.RatingsFragment"
         android:label="@string/ratings_and_reviews"
         tools:layout="@layout/fragment_ratings" >
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
         <action
             android:id="@+id/action_ratingsFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
@@ -41,9 +44,14 @@
         android:name="com.example.nsamovie.ui.search.SearchMoviesFragment"
         android:label="@string/search_movies"
         tools:layout="@layout/fragment_search_movies" >
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
         <action
             android:id="@+id/action_searchMoviesFragment_to_ratingsFragment"
             app:destination="@id/ratingsFragment" />
     </fragment>
+
+
 
 </navigation>

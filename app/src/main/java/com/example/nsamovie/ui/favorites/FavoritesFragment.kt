@@ -11,6 +11,7 @@ import com.example.nsamovie.databinding.FragmentFavoritesBinding
 import com.example.nsamovie.ui.adapter.MovieAdapter
 import com.example.nsamovie.ui.viewmodel.MoviesViewModel
 
+
 class FavoritesFragment : Fragment() {
 
     private var _binding: FragmentFavoritesBinding? = null

@@ -1,6 +1,7 @@
 package com.example.nsamovie.data.repository
 
 
+import androidx.lifecycle.LiveData
 import com.example.nsamovie.data.local_db.MovieDao
 import com.example.nsamovie.data.model.Movie
 import com.example.nsamovie.network.TMDBApiService
@@ -8,7 +9,7 @@ import com.example.nsamovie.network.model.TMDBMovieResponse
 
 class MovieRepository(private val movieDao: MovieDao, private val apiService: TMDBApiService) {
 
-    // שליפת סרטים מומלצים (כעת עם movieId)
+    // שליפת סרטים מומלצים
     suspend fun getRecommendedMovies(movieId: Int, apiKey: String): TMDBMovieResponse {
         return apiService.getRecommendedMovies(movieId, apiKey)
     }
@@ -26,5 +27,25 @@ class MovieRepository(private val movieDao: MovieDao, private val apiService: TM
     // מחיקת סרט ממסד הנתונים המקומי
     suspend fun deleteMovie(movie: Movie) {
         movieDao.deleteMovie(movie)
+    }
+
+    // שליפת כל הסרטים
+    fun getAllMovies(): LiveData<List<Movie>> {
+        return movieDao.getAllMovies() // פונקציה ב-MovieDao
+    }
+
+    // שליפת סרטים מועדפים
+    fun getFavoriteMovies(): LiveData<List<Movie>> {
+        return movieDao.getFavoriteMovies() // פונקציה ב-MovieDao
+    }
+
+    // עדכון סרט
+    suspend fun updateMovie(movie: Movie) {
+        movieDao.updateMovie(movie) // פונקציה ב-MovieDao
+    }
+
+    // שליפת סרט לפי ID
+    suspend fun getMovieById(movieId: Int): Movie? {
+        return movieDao.getMovieById(movieId) // פונקציה ב-MovieDao
     }
 }

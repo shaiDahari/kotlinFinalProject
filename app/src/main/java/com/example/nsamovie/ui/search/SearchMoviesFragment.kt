@@ -1,10 +1,8 @@
 package com.example.nsamovie.ui.search
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +17,9 @@ import com.example.nsamovie.data.model.Movie
 import com.example.nsamovie.ui.viewmodel.MoviesViewModel
 import java.util.*
 
+import androidx.activity.result.contract.ActivityResultContracts
+
+
 class SearchMoviesFragment : Fragment() {
 
     private var _binding: FragmentSearchMoviesBinding? = null
@@ -28,6 +29,14 @@ class SearchMoviesFragment : Fragment() {
     private val args: SearchMoviesFragmentArgs by navArgs()
 
     private var imageUri: Uri? = null
+
+    // יצירת ActivityResultLauncher
+    private val getImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            imageUri = it
+            // כאן תוכל להוסיף קוד להציג את התמונה שנבחרה ב-ImageView אם יש לך
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +57,8 @@ class SearchMoviesFragment : Fragment() {
 
     private fun setupListeners() {
         binding.buttonSelectPoster.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, 100)
+            // שימוש ב-ActivityResultLauncher במקום startActivityForResult
+            getImageLauncher.launch("image/*")
         }
 
         binding.buttonSelectReleaseDate.setOnClickListener {
@@ -93,8 +102,9 @@ class SearchMoviesFragment : Fragment() {
             director = binding.editDirector.text.toString(),
             releaseDate = binding.buttonSelectReleaseDate.text.toString(),
             description = binding.editDescription.text.toString(),
-            posterUri = imageUri?.toString(),
-            rating = binding.ratingBar.rating
+            posterPath = imageUri?.toString(),
+            rating = binding.ratingBar.rating,
+            genre = listOf(binding.editGenre.text.toString())
         )
 
         if (args.movieId != -1) {
@@ -108,9 +118,12 @@ class SearchMoviesFragment : Fragment() {
         findNavController().navigateUp()
     }
 
+    private fun populateMovieDetails() {
+        // כאן תוכל למלא את פרטי הסרט במידת הצורך
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
-

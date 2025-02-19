@@ -41,18 +41,16 @@ class RatingsFragment : Fragment() {
             movie?.let {
                 binding.apply {
                     textViewMovieTitle.text = movie.title
-                    textViewMovieDirector.text = getString(R.string.movie_director, movie.director) // Director display
-                    textViewMovieReleaseDate.text = getString(R.string.movie_release_date, movie.releaseDate) // Release Date display
+                    textViewMovieDirector.text = getString(R.string.movie_director, movie.director)
+                    textViewMovieReleaseDate.text = getString(R.string.movie_release_date, movie.releaseDate)
                     textViewMovieGenre.text = getString(R.string.genre, movie.genre.joinToString(", "))
                     textViewMovieDescription.text = movie.description ?: getString(R.string.no_description)
-                    textViewRating.text = movie.rating
+                    textViewRating.text = movie.rating.toString()
 
-                    // Load poster if available
                     movie.posterPath?.let { poster ->
                         imageViewPoster.setImageURI(poster.toUri())
                     } ?: imageViewPoster.setImageResource(R.drawable.ic_movie_placeholder)
 
-                    // Set toggle button state
                     toggleFavorite.isChecked = movie.favorites
                 }
             }

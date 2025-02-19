@@ -1,53 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Top bar with two buttons -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/topBar"
+    <data>
+        <!-- כאן תוכל להוסיף משתנים אם יש צורך -->
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/white"
-        android:title="Movies"
-        android:titleTextColor="@android:color/white">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/editTitle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="end|center_vertical"
-            android:paddingEnd="16dp">
+            android:layout_height="wrap_content"
+            android:hint="Title"/>
 
-            <!-- Categories button -->
-            <ImageButton
-                android:id="@+id/btnCategories"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_launcher_foreground"
-                android:contentDescription="@string/categories" />
+        <EditText
+            android:id="@+id/editDirector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Director"/>
 
-            <!-- Location button -->
-            <ImageButton
-                android:id="@+id/btnLocation"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_launcher_foreground"
-                android:contentDescription="@string/location" />
-        </LinearLayout>
+        <EditText
+            android:id="@+id/editDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"/>
 
-    </androidx.appcompat.widget.Toolbar>
+        <EditText
+            android:id="@+id/editGenre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Genre"/>
 
-    <!-- Vertical RecyclerView for Movie Items -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMovies"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="72dp"
-        android:padding="8dp"
-        android:orientation="vertical" />
+        <Button
+            android:id="@+id/buttonSelectPoster"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Poster"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <Button
+            android:id="@+id/buttonSelectReleaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Release Date"/>
+
+        <Button
+            android:id="@+id/buttonSaveMovie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Movie"/>
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+</layout>
