@@ -12,7 +12,6 @@ import com.example.nsamovie.databinding.ItemMovieBinding
 
 class MovieAdapter(
     private val onMovieClick: (Movie) -> Unit,
-    private val onDeleteClick: (Movie) -> Unit
 ) : ListAdapter<Movie, MovieAdapter.MovieViewHolder>(MovieDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -35,7 +34,6 @@ class MovieAdapter(
         fun bind(movie: Movie) {
             binding.apply {
                 movieTitle.text = movie.title
-                movieDirector.text = movie.director
                 movieGenre.text = movie.genre.toString()
                 movieRatingText.text = movie.rating.toString()
 
@@ -46,7 +44,6 @@ class MovieAdapter(
                 }
 
                 root.setOnClickListener { onMovieClick(movie) }
-                btnDelete.setOnClickListener { onDeleteClick(movie) }
             }
         }
     }

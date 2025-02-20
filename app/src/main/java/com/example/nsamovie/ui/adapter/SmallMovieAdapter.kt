@@ -30,17 +30,18 @@ class SmallMovieAdapter(
         notifyDataSetChanged()
     }
 
-    inner class SmallMovieViewHolder(private val binding: ItemSmallMovieBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class SmallMovieViewHolder(private val binding: ItemSmallMovieBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
             Glide.with(binding.root.context)
-                .load(movie.posterPath ?: "default_poster_url")  // Default poster if null
+                .load(movie.posterPath)
                 .into(binding.moviePoster)
 
             binding.movieTitle.text = movie.title
-            binding.movieYear.text = movie.releaseDate?.takeIf { it.isNotBlank() } ?: "N/A"  // Safe check for null/blank releaseDate
-            binding.movieGenre.text = movie.genre?.joinToString(", ") ?: "N/A"  // Safe check for null genre list
-            binding.movieRatingText.text = "${movie.rating}/10"
+            binding.movieYear.text = movie.releaseDate.takeIf { it.isNotBlank() } ?: "N/A"
+            binding.movieGenre.text = movie.genre.joinToString(", ")
+            binding.movieRatingText.text = String.format("%.1f/10", movie.rating)
 
             itemView.setOnClickListener {
                 onMovieClick(movie.id)

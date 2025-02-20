@@ -37,37 +37,42 @@ class RatingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupObservers()
-        setupListeners()
+
+        binding.toggleFavorite.setOnCheckedChangeListener { _, isChecked ->
+            updateFavoriteStatus(isChecked)
+        }
     }
 
     private fun setupObservers() {
-        // Call the suspend function in a coroutine using lifecycleScope
         lifecycleScope.launch {
             val movie = viewModel.getMovieById(args.movieId)
-            movie?.let {
-                binding.apply {
-                    textViewMovieTitle.text = movie.title
-                    textViewMovieDirector.text = getString(R.string.movie_director, movie.director)
-                    textViewMovieReleaseDate.text = getString(R.string.movie_release_date, movie.releaseDate)
-                    textViewMovieGenre.text = getString(R.string.genre, movie.genre.joinToString(", "))
-                    textViewMovieDescription.text = movie.description ?: getString(R.string.no_description)
-                    textViewRating.text = String.format(Locale.getDefault(), "%.1f", movie.rating)
-
-                    movie.posterPath?.let { poster ->
-                        imageViewPoster.setImageURI(poster.toUri())
-                    } ?: imageViewPoster.setImageResource(R.drawable.ic_movie_placeholder)
-
-                    toggleFavorite.isChecked = movie.favorites
-                }
+            if (movie != null) {
+                updateUI(movie)
+            } else {
+                binding.textViewMovieTitle.text = getString(R.string.movie_not_found)
             }
         }
     }
 
-    private fun setupListeners() {
-        binding.toggleFavorite.setOnCheckedChangeListener { _, isChecked ->
-            lifecycleScope.launch {
-                viewModel.updateFavoriteStatus(args.movieId, isChecked)
+    private fun updateUI(movie: com.example.nsamovie.data.model.Movie) {
+        binding.apply {
+            textViewMovieTitle.text = movie.title
+            textViewMovieReleaseDate.text = getString(R.string.movie_release_date, movie.releaseDate)
+            textViewMovieGenre.text = getString(R.string.genre, movie.genre.joinToString(", "))
+            textViewMovieDescription.text = movie.overview
+            textViewRating.text = String.format(Locale.getDefault(), "%.1f", movie.rating)
+
+            movie.posterPath.let { poster ->
+                imageViewPoster.setImageURI(poster.toUri())
             }
+
+            toggleFavorite.isChecked = movie.favorites
+        }
+    }
+
+    private fun updateFavoriteStatus(isFavorite: Boolean) {
+        lifecycleScope.launch {
+            viewModel.updateFavoriteStatus(args.movieId, isFavorite)
         }
     }
 

@@ -30,26 +30,21 @@
             android:textStyle="bold"
             android:textColor="@color/white"/>
 
-        <!-- Movie Info (Release Year and Genre) -->
-        <LinearLayout
+        <!-- Movie Info (Release Year) -->
+        <TextView
+            android:id="@+id/movieYear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="4dp">
+            android:textColor="@color/white"
+            android:layout_marginTop="4dp"/>
 
-            <TextView
-                android:id="@+id/movieYear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_marginEnd="8dp"/>
-
-            <TextView
-                android:id="@+id/movieGenre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"/>
-        </LinearLayout>
+        <!-- Movie Genre Below Release Year -->
+        <TextView
+            android:id="@+id/movieGenre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginTop="4dp"/>
 
         <!-- Rating -->
         <LinearLayout

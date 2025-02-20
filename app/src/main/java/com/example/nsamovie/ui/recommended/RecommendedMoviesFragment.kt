@@ -1,21 +1,5 @@
 package com.example.nsamovie.ui.recommended
 
-//import android.os.Bundle
-//import android.view.LayoutInflater
-//import android.view.View
-//import android.view.ViewGroup
-//import androidx.fragment.app.Fragment
-//import androidx.fragment.app.viewModels
-//import androidx.navigation.fragment.findNavController
-//import androidx.recyclerview.widget.LinearLayoutManager
-//import com.example.nsamovie.R
-//import com.example.nsamovie.databinding.FragmentRecommendedMoviesBinding
-//import com.example.nsamovie.ui.adapter.MovieAdapter
-//import com.example.nsamovie.ui.viewmodel.MoviesViewModel
-//import dagger.hilt.android.AndroidEntryPoint
-//
-
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -38,7 +22,7 @@ class RecommendedMoviesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MoviesViewModel by viewModels()
-    private lateinit var recommendedMovieAdapter: SmallMovieAdapter
+    private lateinit var highRatedAdapter: SmallMovieAdapter
     private lateinit var newReleasesAdapter: SmallMovieAdapter
 
     override fun onCreateView(
@@ -56,13 +40,12 @@ class RecommendedMoviesFragment : Fragment() {
         setupObservers()
         setupListeners()
 
-        // Fetch movies
-        val apiKey = getString(R.string.api_key) // Get the API key from resources
+        val apiKey = getString(R.string.api_key)
         viewModel.fetchMovies(apiKey)
     }
 
     private fun setupRecyclerViews() {
-        recommendedMovieAdapter = SmallMovieAdapter(
+        highRatedAdapter = SmallMovieAdapter(
             movies = mutableListOf(),
             onMovieClick = { movieId ->
                 val action = RecommendedMoviesFragmentDirections
@@ -82,7 +65,7 @@ class RecommendedMoviesFragment : Fragment() {
 
         binding.recyclerViewRecommendedMovies.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = recommendedMovieAdapter
+            adapter = highRatedAdapter
         }
 
         binding.recyclerViewNewReleases.apply {
@@ -92,21 +75,18 @@ class RecommendedMoviesFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.movieList.observe(viewLifecycleOwner) { movies ->
-            if (movies.isNullOrEmpty()) {
-                Log.e("RecommendedMovies", "No movies fetched")
-            } else {
-                Log.d("RecommendedMovies", "Movies received: ${movies.size}")
-                recommendedMovieAdapter.setMovies(movies) // Update the recommended movie list
-                newReleasesAdapter.setMovies(movies) // Update the new releases list (or handle differently if they differ)
-            }
+        viewModel.highRatedMovies.observe(viewLifecycleOwner) { movies ->
+            highRatedAdapter.setMovies(movies)
+        }
+
+        viewModel.newReleasesMovies.observe(viewLifecycleOwner) { movies ->
+            newReleasesAdapter.setMovies(movies)
         }
     }
 
     private fun setupListeners() {
         binding.btnSearchMovies.setOnClickListener {
             try {
-                Log.d("RecommendedMovies", "Attempting to navigate to search")
                 val action = RecommendedMoviesFragmentDirections
                     .actionRecommendedMoviesFragmentToSearchMoviesFragment(-1)
                 findNavController().navigate(action)

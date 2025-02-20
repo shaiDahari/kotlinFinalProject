@@ -7,59 +7,146 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nsamovie.data.model.Movie
 import com.example.nsamovie.data.repository.MovieRepository
-import com.example.nsamovie.network.model.TMDBMovieResponse
-import com.example.nsamovie.network.TMDBApiService
+import com.example.nsamovie.network.model.TMDBMovie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
-    private val repository: MovieRepository,
-    private val apiService: TMDBApiService
+    private val repository: MovieRepository
 ) : ViewModel() {
 
-    // LiveData for all movies and favorites
     val allMovies: LiveData<List<Movie>> = repository.getAllMovies()
     val favoriteMovies: LiveData<List<Movie>> = repository.getFavoriteMovies()
 
-    // MutableLiveData for fetched movies
     private val _movieList = MutableLiveData<List<Movie>>()
     val movieList: LiveData<List<Movie>> get() = _movieList
 
-    // Function to fetch movies from API
-    fun fetchMovies(apiKey: String, language: String = "en-US", page: Int = 1) {
+    private val _highRatedMovies = MutableLiveData<List<Movie>>()
+    val highRatedMovies: LiveData<List<Movie>> get() = _highRatedMovies
+
+    private val _newReleasesMovies = MutableLiveData<List<Movie>>()
+    val newReleasesMovies: LiveData<List<Movie>> get() = _newReleasesMovies
+
+    private val genreMap = mutableMapOf<Int, String>()
+
+    init {
+        fetchGenres()
+    }
+
+    private fun fetchGenres() {
         viewModelScope.launch {
             try {
-                val response = apiService.getPopularMovies(apiKey, language, page)
-                if (response.movies.isNullOrEmpty()) {
-                    Log.e("MoviesViewModel", "No movies fetched")
-                } else {
-                    _movieList.postValue(response.movies) // Update the live data with fetched movies
+                repository.getGenres()
+            } catch (e: Exception) {
+                Log.e("MoviesViewModel", "Error fetching genres: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun getGenreNameById(id: Int): String {
+        return repository.getGenreNameById(id)
+    }
+
+    fun fetchMovies( language: String = "en-US", page: Int = 1) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getPopularMovies(language,page)
+                val movies = response.movies.map { convertTMDBMovieToMovie(it) }
+
+
+                movies.forEach { movie ->
+                    repository.insertMovie(movie)
                 }
+
+                _movieList.postValue(movies)
+                _highRatedMovies.postValue(movies.sortedByDescending { it.rating })
+                _newReleasesMovies.postValue(movies.sortedByDescending { it.releaseDate })
+
             } catch (e: Exception) {
                 Log.e("MoviesViewModel", "Error fetching movies: ${e.localizedMessage}")
             }
         }
     }
 
-    suspend fun getMovieById(movieId: Int): Movie? {
-        return repository.getMovieById(movieId)
+    fun searchMovies(query: String) {
+        viewModelScope.launch {
+            try {
+                val response = repository.searchMovies(query)
+                val movies = response.movies.map { convertTMDBMovieToMovie(it) }
+                _movieList.postValue(movies)
+            } catch (e: Exception) {
+                Log.e("MoviesViewModel", "Error searching movies: ${e.localizedMessage}")
+            }
+        }
     }
 
-    fun deleteMovie(movie: Movie) {
+    fun getRecommendedMovies(movieId: Int) {
         viewModelScope.launch {
-            repository.deleteMovie(movie)
+            try {
+                val response = repository.getRecommendedMovies(movieId)
+                val movies = response.movies.map { convertTMDBMovieToMovie(it) }
+                _movieList.postValue(movies)
+            } catch (e: Exception) {
+                Log.e("MoviesViewModel", "Error fetching recommended movies: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun insertMovie(movie: Movie) {
+        viewModelScope.launch {
+            try {
+                repository.insertMovie(movie)
+            } catch (e: Exception) {
+                Log.e("MoviesViewModel", "Error inserting movie: ${e.localizedMessage}")
+            }
+        }
+    }
+
+
+    fun updateMovie(movie: Movie) {
+        viewModelScope.launch {
+            try {
+                repository.updateMovie(movie)
+            } catch (e: Exception) {
+                Log.e("MoviesViewModel", "Error updating movie: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    suspend fun getMovieById(movieId: Int): Movie? {
+        return try {
+            repository.getMovieById(movieId)
+        } catch (e: Exception) {
+            Log.e("MoviesViewModel", "Error fetching movie by ID: ${e.localizedMessage}")
+            null
         }
     }
 
     fun updateFavoriteStatus(movieId: Int, isFavorite: Boolean) {
         viewModelScope.launch {
-            val movie = repository.getMovieById(movieId)
-            movie?.let {
-                val updatedMovie = it.copy(favorites = isFavorite)
-                repository.updateMovie(updatedMovie)
+            try {
+                val movie = repository.getMovieById(movieId)
+                if (movie != null) {
+                    val updatedMovie = movie.copy(favorites = isFavorite)
+                    repository.updateMovie(updatedMovie)
+                }
+            } catch (e: Exception) {
+                Log.e("MoviesViewModel", "Error updating favorite status: ${e.localizedMessage}")
             }
         }
+    }
+
+    private fun convertTMDBMovieToMovie(tmdbMovie: TMDBMovie): Movie {
+        return Movie(
+            id = tmdbMovie.id,
+            title = tmdbMovie.title,
+            releaseDate = tmdbMovie.releaseDate ?: "N/A",
+            posterPath = "https://image.tmdb.org/t/p/w500" + (tmdbMovie.posterPath ?: ""),
+            rating = tmdbMovie.voteAverage ?: 0.0,
+            genre = tmdbMovie.genreIds.map { getGenreNameById(it) }, // Map genre IDs to names
+            overview = tmdbMovie.overview ?: "No overview available"
+        )
     }
 }

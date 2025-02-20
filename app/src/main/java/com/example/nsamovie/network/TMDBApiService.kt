@@ -1,5 +1,6 @@
 package com.example.nsamovie.network
 
+import com.example.nsamovie.network.model.TMDBGenreResponse
 import com.example.nsamovie.network.model.TMDBMovieResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -29,4 +30,11 @@ interface TMDBApiService {
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1
     ): TMDBMovieResponse
+
+    // New endpoint to get genres
+    @GET("genre/movie/list")
+    suspend fun getMovieGenres(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String = "en-US"
+    ): TMDBGenreResponse
 }
