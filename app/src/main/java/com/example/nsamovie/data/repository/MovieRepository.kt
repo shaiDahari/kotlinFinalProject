@@ -1,51 +1,49 @@
 package com.example.nsamovie.data.repository
 
-
+import android.content.Context
 import androidx.lifecycle.LiveData
+import com.example.nsamovie.R
 import com.example.nsamovie.data.local_db.MovieDao
 import com.example.nsamovie.data.model.Movie
 import com.example.nsamovie.network.TMDBApiService
-import com.example.nsamovie.network.model.TMDBMovieResponse
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MovieRepository(private val movieDao: MovieDao, private val apiService: TMDBApiService) {
+@Singleton
+class MovieRepository @Inject constructor(
+    private val movieDao: MovieDao,
+    private val apiService: TMDBApiService,
+    private val context: Context // Injecting context to access resources
+) {
+    private val apiKey: String = context.getString(R.string.api_key) // Access API key from resources
 
-    // שליפת סרטים מומלצים
-    suspend fun getRecommendedMovies(movieId: Int, apiKey: String): TMDBMovieResponse {
-        return apiService.getRecommendedMovies(movieId, apiKey)
-    }
+    // Fetch all movies from local database
+    fun getAllMovies(): LiveData<List<Movie>> = movieDao.getAllMovies()
 
-    // חיפוש סרטים לפי שם
-    suspend fun searchMovies(query: String, apiKey: String): TMDBMovieResponse {
-        return apiService.searchMovies(apiKey, query)
-    }
+    // Fetch favorite movies from local database
+    fun getFavoriteMovies(): LiveData<List<Movie>> = movieDao.getFavoriteMovies()
 
-    // הוספת סרט למסד הנתונים המקומי (Room)
-    suspend fun insertMovie(movie: Movie) {
-        movieDao.insertMovie(movie)
-    }
+    // Insert a movie into the local database
+    suspend fun insertMovie(movie: Movie) = movieDao.insertMovie(movie)
 
-    // מחיקת סרט ממסד הנתונים המקומי
-    suspend fun deleteMovie(movie: Movie) {
-        movieDao.deleteMovie(movie)
-    }
+    // Delete a movie from the local database
+    suspend fun deleteMovie(movie: Movie) = movieDao.deleteMovie(movie)
 
-    // שליפת כל הסרטים
-    fun getAllMovies(): LiveData<List<Movie>> {
-        return movieDao.getAllMovies() // פונקציה ב-MovieDao
-    }
+    // Update a movie in the local database
+    suspend fun updateMovie(movie: Movie) = movieDao.updateMovie(movie)
 
-    // שליפת סרטים מועדפים
-    fun getFavoriteMovies(): LiveData<List<Movie>> {
-        return movieDao.getFavoriteMovies() // פונקציה ב-MovieDao
-    }
+    // Fetch a movie by its ID from the local database
+    suspend fun getMovieById(movieId: Int): Movie? = movieDao.getMovieById(movieId)
 
-    // עדכון סרט
-    suspend fun updateMovie(movie: Movie) {
-        movieDao.updateMovie(movie) // פונקציה ב-MovieDao
-    }
+    // Fetch recommended movies from TMDB API
+    suspend fun getRecommendedMovies(movieId: Int) =
+        apiService.getRecommendedMovies(movieId, apiKey)
 
-    // שליפת סרט לפי ID
-    suspend fun getMovieById(movieId: Int): Movie? {
-        return movieDao.getMovieById(movieId) // פונקציה ב-MovieDao
-    }
+    // Search movies by a query string from TMDB API
+    suspend fun searchMovies(query: String) =
+        apiService.searchMovies(apiKey, query)
+
+    // Fetch popular movies from TMDB API
+    suspend fun getPopularMovies(page: Int = 1) =
+        apiService.getPopularMovies(apiKey, "en-US", page)
 }

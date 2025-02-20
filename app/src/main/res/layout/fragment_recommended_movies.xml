@@ -1,66 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp"
     android:background="@color/black"
     tools:context=".ui.recommended.RecommendedMoviesFragment">
 
-    <!-- כותרת של המסך -->
+    <!-- Recommended Movies Title -->
     <TextView
         android:id="@+id/titleRecommended"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/recommended_movies"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- רשימה של סרטים -->
+    <!-- Recommended Movies RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMovies"
+        android:id="@+id/recyclerViewRecommendedMovies"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="8dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
         android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:overScrollMode="never"
         android:scrollbars="none"
-        android:overScrollMode="never"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleRecommended" />
 
-    <!-- כפתור חיפוש סרטים -->
+    <!-- New Releases Title -->
+    <TextView
+        android:id="@+id/titleNewReleases"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/new_releases"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewRecommendedMovies" />
+
+    <!-- New Releases RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewNewReleases"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleNewReleases" />
+
+    <!-- Button Bar for Search and Favorites -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:padding="8dp">
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
+        <!-- Search Movies Button -->
         <Button
             android:id="@+id/btnSearchMovies"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="@string/search_movies"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
             android:backgroundTint="@color/white"
-            android:textColor="@color/black"
             android:padding="12dp"
-            android:layout_marginEnd="8dp"/>
+            android:text="@string/search_movies"
+            android:textColor="@color/black" />
 
+        <!-- Favorites Button -->
         <Button
             android:id="@+id/btnFavorites"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="@string/favorites"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
             android:backgroundTint="@color/white"
-            android:textColor="@color/black"
             android:padding="12dp"
-            android:layout_marginStart="8dp"/>
+            android:text="@string/favorites"
+            android:textColor="@color/black" />
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

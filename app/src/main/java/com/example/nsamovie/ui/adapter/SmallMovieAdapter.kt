@@ -8,7 +8,7 @@ import com.example.nsamovie.databinding.ItemSmallMovieBinding
 import com.example.nsamovie.data.model.Movie
 
 class SmallMovieAdapter(
-    private val movies: List<Movie>,
+    private var movies: MutableList<Movie>,
     private val onMovieClick: (movieId: Int) -> Unit
 ) : RecyclerView.Adapter<SmallMovieAdapter.SmallMovieViewHolder>() {
 
@@ -24,17 +24,22 @@ class SmallMovieAdapter(
 
     override fun getItemCount(): Int = movies.size
 
+    fun setMovies(newMovies: List<Movie>) {
+        this.movies.clear()
+        this.movies.addAll(newMovies)
+        notifyDataSetChanged()
+    }
+
     inner class SmallMovieViewHolder(private val binding: ItemSmallMovieBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
-
             Glide.with(binding.root.context)
-                .load(movie.posterPath)
+                .load(movie.posterPath ?: "default_poster_url")  // Default poster if null
                 .into(binding.moviePoster)
 
             binding.movieTitle.text = movie.title
-            binding.movieYear.text = movie.releaseDate.toString()
-            binding.movieGenre.text = movie.genre.joinToString(", ")  // Assuming genre is a list of strings
+            binding.movieYear.text = movie.releaseDate?.takeIf { it.isNotBlank() } ?: "N/A"  // Safe check for null/blank releaseDate
+            binding.movieGenre.text = movie.genre?.joinToString(", ") ?: "N/A"  // Safe check for null genre list
             binding.movieRatingText.text = "${movie.rating}/10"
 
             itemView.setOnClickListener {

@@ -7,12 +7,12 @@ import androidx.room.PrimaryKey
 data class Movie(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val title: String,
+    val title: String = " No title",
     val director: String,
     val releaseDate: String,
     val posterPath: String? = null,
-    val rating: Float = 0f,
-    val description: String? = null,
+    val rating: Double = 0.0,
+    val description: String? = "no description",
     val favorites: Boolean = false,
     val genre: List<String>
 )

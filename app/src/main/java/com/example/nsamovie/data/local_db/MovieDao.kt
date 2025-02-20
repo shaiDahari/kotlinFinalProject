@@ -17,7 +17,7 @@ interface MovieDao {
     fun getAllMovies(): LiveData<List<Movie>>
 
     @Query("SELECT * FROM movies WHERE favorites = 1")
-    fun getFavoriteMovies(): LiveData<List<Movie>> // פונקציה זו מחזירה את הסרטים המועדפים
+    fun getFavoriteMovies(): LiveData<List<Movie>>
 
     @Query("SELECT * FROM movies WHERE id = :movieId")
     suspend fun getMovieById(movieId: Int): Movie?

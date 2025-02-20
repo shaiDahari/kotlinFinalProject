@@ -1,78 +1,65 @@
 package com.example.nsamovie.ui.viewmodel
-//
-//
-//import android.util.Log
-//import androidx.lifecycle.*
-//import com.example.nsamovie.data.model.Movie
-//import com.example.nsamovie.data.repository.MovieRepository
-//import kotlinx.coroutines.launch
-//
-//import dagger.hilt.android.lifecycle.HiltViewModel
-//import javax.inject.Inject
 
-
-import androidx.lifecycle.*
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.nsamovie.data.model.Movie
 import com.example.nsamovie.data.repository.MovieRepository
+import com.example.nsamovie.network.model.TMDBMovieResponse
+import com.example.nsamovie.network.TMDBApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MoviesViewModel @Inject constructor(private val repository: MovieRepository) : ViewModel() {
+class MoviesViewModel @Inject constructor(
+    private val repository: MovieRepository,
+    private val apiService: TMDBApiService
+) : ViewModel() {
+
+    // LiveData for all movies and favorites
     val allMovies: LiveData<List<Movie>> = repository.getAllMovies()
     val favoriteMovies: LiveData<List<Movie>> = repository.getFavoriteMovies()
 
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> get() = _errorMessage
+    // MutableLiveData for fetched movies
+    private val _movieList = MutableLiveData<List<Movie>>()
+    val movieList: LiveData<List<Movie>> get() = _movieList
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> get() = _isLoading
-
-    private val _selectedMovie = MutableLiveData<Movie?>()
-    val selectedMovie: LiveData<Movie?> get() = _selectedMovie
-
-    fun updateFavoriteStatus(movieId: Int, isFavorite: Boolean) = viewModelScope.launch {
-        val movie = repository.getMovieById(movieId)
-        movie?.let {
-            val updatedMovie = it.copy(favorites = isFavorite)
-            repository.updateMovie(updatedMovie)
-        }
-    }
-
-    fun insert(movie: Movie) = viewModelScope.launch {
-        try {
-            repository.insertMovie(movie)
-        } catch (e: Exception) {
-            _errorMessage.value = "Error adding movie: ${e.message}"
-        }
-    }
-
-    fun update(movie: Movie) = viewModelScope.launch {
-        try {
-            repository.updateMovie(movie)
-        } catch (e: Exception) {
-            _errorMessage.value = "Error updating movie: ${e.message}"
-        }
-    }
-
-    fun delete(movie: Movie) = viewModelScope.launch {
-        try {
-            repository.deleteMovie(movie)
-        } catch (e: Exception) {
-            _errorMessage.value = "Error deleting movie: ${e.message}"
-        }
-    }
-
-    fun getMovieById(movieId: Int): LiveData<Movie?> {
-        val result = MutableLiveData<Movie?>()
+    // Function to fetch movies from API
+    fun fetchMovies(apiKey: String, language: String = "en-US", page: Int = 1) {
         viewModelScope.launch {
             try {
-                result.value = repository.getMovieById(movieId)
+                val response = apiService.getPopularMovies(apiKey, language, page)
+                if (response.movies.isNullOrEmpty()) {
+                    Log.e("MoviesViewModel", "No movies fetched")
+                } else {
+                    _movieList.postValue(response.movies) // Update the live data with fetched movies
+                }
             } catch (e: Exception) {
-                _errorMessage.value = "Error fetching movie: ${e.message}"
+                Log.e("MoviesViewModel", "Error fetching movies: ${e.localizedMessage}")
             }
         }
-        return result
+    }
+
+    suspend fun getMovieById(movieId: Int): Movie? {
+        return repository.getMovieById(movieId)
+    }
+
+    fun deleteMovie(movie: Movie) {
+        viewModelScope.launch {
+            repository.deleteMovie(movie)
+        }
+    }
+
+    fun updateFavoriteStatus(movieId: Int, isFavorite: Boolean) {
+        viewModelScope.launch {
+            val movie = repository.getMovieById(movieId)
+            movie?.let {
+                val updatedMovie = it.copy(favorites = isFavorite)
+                repository.updateMovie(updatedMovie)
+            }
+        }
     }
 }

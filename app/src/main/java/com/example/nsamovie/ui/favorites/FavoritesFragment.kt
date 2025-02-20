@@ -54,7 +54,7 @@ class FavoritesFragment : Fragment() {
     private fun setupRecyclerView() {
         movieAdapter = MovieAdapter(
             onMovieClick = { /* Do not navigate, just show */ },
-            onDeleteClick = { movie -> viewModel.delete(movie) }
+            onDeleteClick = { movie -> viewModel.deleteMovie(movie) }
         )
 
         binding.recyclerViewFavorites.apply {

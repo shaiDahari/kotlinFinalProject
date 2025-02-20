@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NSAMovie</string>
+    <string name="api_key" translatable="false">5f3da814cf4827d80ed64bdac35e5224</string>
 
     <!-- Movie details -->
     <string name="movie_director">Director: %s</string>
@@ -54,4 +55,7 @@
     <!-- Additional strings -->
     <string name="movie_poster">Movie Poster</string>
     <string name="search_movies">Search Movies</string>
+    <string name="categories">Categories</string>
+    <string name="location">Location</string>
+    <string name="new_releases">New Releases</string>
 </resources>

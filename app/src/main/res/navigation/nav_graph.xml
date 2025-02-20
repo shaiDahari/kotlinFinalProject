@@ -18,6 +18,10 @@
         <action
             android:id="@+id/action_recommendedMoviesFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
+        <action
+            android:id="@+id/action_recommendedMoviesFragment_to_searchMoviesFragment6"
+            app:destination="@id/searchMoviesFragment"
+           />
     </fragment>
 
     <fragment
