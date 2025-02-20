@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- General UI Texts -->
     <string name="app_name">נאור.שי.אדנה</string>
-    <string name="ok">אישור</string>
-    <string name="cancel">ביטול</string>
 
-    <!-- Screen Titles -->
-    <string name="title_add_movie">הוספת סרט</string>
-    <string name="title_edit_movie">עריכת סרט</string>
-    <string name="title_movie_details">פרטי סרט</string>
-    <string name="title_movie_list">רשימת סרטים</string>
-
-    <!-- Movie Fields -->
+    <!-- פרטי הסרט -->
+    <string name="movie_director">במאי: %s</string>
+    <string name="movie_release_date">תאריך הפצה: %s</string>
+    <string name="genre">ז\'אנר: %s</string>
     <string name="movie_title">כותרת סרט</string>
-    <string name="movie_director">במאי</string>
-    <string name="movie_release_date">תאריך הפצה</string>
     <string name="movie_description">תיאור</string>
     <string name="movie_rating">דירוג</string>
-    <string name="movie_poster">פוסטר</string>
+    <string name="no_description">אין תיאור זמין</string>
 
-    <!-- Hint Texts -->
+    <!-- כפתורי פעולה -->
+    <string name="action_save">שמור</string>
+    <string name="action_edit">ערוך</string>
+    <string name="action_delete">מחק</string>
+    <string name="action_add">הוסף חדש</string>
+
+    <!-- הודעות -->
+    <string name="msg_save_success">הסרט נשמר בהצלחה!</string>
+    <string name="msg_edit_success">הסרט נערך בהצלחה!</string>
+    <string name="msg_delete_success">הסרט נמחק בהצלחה!</string>
+    <string name="msg_error">אירעה שגיאה. אנא נסה שוב!</string>
+
+    <!-- רמזים -->
     <string name="hint_movie_title">הכנס את כותרת הסרט</string>
-    <string name="hint_movie_genre">הכנס את ז\'אנר הסרט</string>
+    <string name="hint_movie_genre">הכנס את גאנר הסרט</string>
     <string name="hint_movie_director">הכנס את שם הבמאי</string>
     <string name="hint_movie_release_date">הכנס את שנת ההפצה</string>
     <string name="hint_movie_description">כתוב תיאור קצר</string>
     <string name="hint_movie_rating">דרג מ-1 עד 5</string>
 
-    <!-- Error Messages -->
-    <string name="error_empty_title">בבקשה הכנס תאריך</string>
+    <!-- שגיאות -->
+    <string name="error_empty_title">בבקשה הכנס כותרת</string>
     <string name="error_empty_director">בבקשה הכנס במאי</string>
     <string name="error_invalid_date">בבקשה הכנס תאריך תקין</string>
 
-    <!-- Action Buttons -->
-    <string name="action_save">שמור</string>
-    <string name="action_edit">ערוך</string>
-    <string name="action_delete">מחק</string>
-    <string name="action_add">הוסף חדש</string>
-    <string name="add_poster">הוסף פוסטר</string>
-    <string name="action_details">צפה בפרטים</string>
-
-    <!-- Feedback Messages -->
-    <string name="msg_save_success">הסרט נשמר בהצלחה!</string>
-    <string name="msg_edit_success">הסרט נערך בהצלחה!</string>
-    <string name="msg_delete_success">הסרט נמחק בהצלחה!</string>
-    <string name="msg_error">אירעה שגיאה. אנא נסה שוב!</string>
-    <string name="msg_poster_added">התמונה התווספה בהצלחה</string>
-    <string name="delete_confirmation_title">אתה בטוח שאתה רוצה למחוק את הסרט ?</string>
+    <!-- Misc -->
+    <string name="favorites_movies">סרטים מועדפים</string>
+    <string name="recommended_movies">סרטים מומלצים</string>
+    <string name="ratings_and_reviews">דירוגים וביקורות</string>
+    <string name="favorites">מועדפים</string>
+    <string name="favorite">מועדף</string>
+    <string name="not_favorite">לא מועדף</string>
     <string name="gallery_access_required">נדרשת הרשאה לגלריה לבחירת תמונות</string>
 
-    <!--  fragment labels -->
-    <string name="main_fragment">פרגמנט ראשי</string>
-    <string name="add_edit_movie">הוסף/ערוך סרט</string>
-    <string name="movie_details">פרטי סרט</string>
+    <!-- כותרות -->
+    <string name="title_add_movie">הוספת סרט</string>
+    <string name="title_edit_movie">עריכת סרט</string>
+    <string name="title_movie_details">פרטי סרט</string>
+    <string name="title_movie_list">רשימת סרטים</string>
 
+    <!-- סטרינגים נוספים -->
+    <string name="movie_poster">פוסטר הסרט</string>
+    <string name="search_movies">חיפוש סרטים</string>
 </resources>

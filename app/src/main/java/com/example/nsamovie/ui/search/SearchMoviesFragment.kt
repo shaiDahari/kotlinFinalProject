@@ -1,25 +1,48 @@
 package com.example.nsamovie.ui.search
+//
+//import android.app.DatePickerDialog
+//import android.net.Uri
+//import android.os.Bundle
+//import android.view.LayoutInflater
+//import android.view.View
+//import android.view.ViewGroup
+//import android.widget.Toast
+//import androidx.fragment.app.Fragment
+//import androidx.fragment.app.viewModels
+//import androidx.navigation.fragment.findNavController
+//import androidx.navigation.fragment.navArgs
+//import com.example.nsamovie.R
+//import com.example.nsamovie.databinding.FragmentSearchMoviesBinding
+//import com.example.nsamovie.data.model.Movie
+//import com.example.nsamovie.ui.viewmodel.MoviesViewModel
+//import java.util.*
+//
+//import androidx.activity.result.contract.ActivityResultContracts
+//import com.example.nsamovie.mainActivity.MainActivity
+//import com.example.nsamovie.ui.viewmodel.ViewModelFactory
+
 
 import android.app.DatePickerDialog
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.nsamovie.R
-import com.example.nsamovie.databinding.FragmentSearchMoviesBinding
 import com.example.nsamovie.data.model.Movie
+import com.example.nsamovie.databinding.FragmentSearchMoviesBinding
 import com.example.nsamovie.ui.viewmodel.MoviesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
-import androidx.activity.result.contract.ActivityResultContracts
-
-
+@AndroidEntryPoint
 class SearchMoviesFragment : Fragment() {
 
     private var _binding: FragmentSearchMoviesBinding? = null
@@ -30,11 +53,9 @@ class SearchMoviesFragment : Fragment() {
 
     private var imageUri: Uri? = null
 
-    // יצירת ActivityResultLauncher
     private val getImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             imageUri = it
-            // כאן תוכל להוסיף קוד להציג את התמונה שנבחרה ב-ImageView אם יש לך
         }
     }
 
@@ -42,8 +63,15 @@ class SearchMoviesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchMoviesBinding.inflate(inflater, container, false)
-        return binding.root
+        try {
+            Log.d("SearchMoviesFragment", "Starting onCreateView")
+            _binding = FragmentSearchMoviesBinding.inflate(inflater, container, false)
+            Log.d("SearchMoviesFragment", "Binding successful")
+            return binding.root
+        } catch (e: Exception) {
+            Log.e("SearchMoviesFragment", "Error in onCreateView", e)
+            throw e
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +85,6 @@ class SearchMoviesFragment : Fragment() {
 
     private fun setupListeners() {
         binding.buttonSelectPoster.setOnClickListener {
-            // שימוש ב-ActivityResultLauncher במקום startActivityForResult
             getImageLauncher.launch("image/*")
         }
 

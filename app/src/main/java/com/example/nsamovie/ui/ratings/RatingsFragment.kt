@@ -1,5 +1,19 @@
 package com.example.nsamovie.ui.ratings
 
+//import android.os.Bundle
+//import android.view.LayoutInflater
+//import android.view.View
+//import android.view.ViewGroup
+//import androidx.core.net.toUri
+//import androidx.fragment.app.Fragment
+//import androidx.fragment.app.viewModels
+//import androidx.navigation.fragment.navArgs
+//import com.example.nsamovie.R
+//import com.example.nsamovie.databinding.FragmentRatingsBinding
+//import com.example.nsamovie.mainActivity.MainActivity
+//import com.example.nsamovie.ui.viewmodel.MoviesViewModel
+//import com.example.nsamovie.ui.viewmodel.ViewModelFactory
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,12 +21,14 @@ import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.nsamovie.R
 import com.example.nsamovie.databinding.FragmentRatingsBinding
 import com.example.nsamovie.ui.viewmodel.MoviesViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
+@AndroidEntryPoint
 class RatingsFragment : Fragment() {
 
     private var _binding: FragmentRatingsBinding? = null
@@ -45,7 +61,7 @@ class RatingsFragment : Fragment() {
                     textViewMovieReleaseDate.text = getString(R.string.movie_release_date, movie.releaseDate)
                     textViewMovieGenre.text = getString(R.string.genre, movie.genre.joinToString(", "))
                     textViewMovieDescription.text = movie.description ?: getString(R.string.no_description)
-                    textViewRating.text = movie.rating.toString()
+                    textViewRating.text = String.format(Locale.getDefault(), "%.1f", movie.rating)
 
                     movie.posterPath?.let { poster ->
                         imageViewPoster.setImageURI(poster.toUri())

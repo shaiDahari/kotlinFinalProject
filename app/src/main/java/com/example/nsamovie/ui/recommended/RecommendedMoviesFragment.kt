@@ -1,6 +1,23 @@
 package com.example.nsamovie.ui.recommended
 
+//import android.os.Bundle
+//import android.view.LayoutInflater
+//import android.view.View
+//import android.view.ViewGroup
+//import androidx.fragment.app.Fragment
+//import androidx.fragment.app.viewModels
+//import androidx.navigation.fragment.findNavController
+//import androidx.recyclerview.widget.LinearLayoutManager
+//import com.example.nsamovie.R
+//import com.example.nsamovie.databinding.FragmentRecommendedMoviesBinding
+//import com.example.nsamovie.ui.adapter.MovieAdapter
+//import com.example.nsamovie.ui.viewmodel.MoviesViewModel
+//import dagger.hilt.android.AndroidEntryPoint
+//
+
+
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +29,9 @@ import com.example.nsamovie.R
 import com.example.nsamovie.databinding.FragmentRecommendedMoviesBinding
 import com.example.nsamovie.ui.adapter.MovieAdapter
 import com.example.nsamovie.ui.viewmodel.MoviesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecommendedMoviesFragment : Fragment() {
 
     private var _binding: FragmentRecommendedMoviesBinding? = null
@@ -61,7 +80,14 @@ class RecommendedMoviesFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnSearchMovies.setOnClickListener {
-            findNavController().navigate(R.id.action_recommendedMoviesFragment_to_searchMoviesFragment)
+            try {
+                Log.d("RecommendedMovies", "Attempting to navigate to search")
+                val action = RecommendedMoviesFragmentDirections
+                    .actionRecommendedMoviesFragmentToSearchMoviesFragment(-1)
+                findNavController().navigate(action)
+            } catch (e: Exception) {
+                Log.e("RecommendedMovies", "Navigation failed", e)
+            }
         }
 
         binding.btnFavorites.setOnClickListener {
