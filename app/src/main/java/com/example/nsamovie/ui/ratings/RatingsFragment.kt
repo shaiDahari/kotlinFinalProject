@@ -38,6 +38,7 @@ class RatingsFragment : Fragment() {
 
         setupObservers()
 
+        // Handle favorite toggle button click
         binding.toggleFavorite.setOnCheckedChangeListener { _, isChecked ->
             updateFavoriteStatus(isChecked)
         }

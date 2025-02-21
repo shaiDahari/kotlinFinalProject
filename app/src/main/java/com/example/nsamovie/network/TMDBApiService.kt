@@ -31,7 +31,6 @@ interface TMDBApiService {
         @Query("page") page: Int = 1
     ): TMDBMovieResponse
 
-    // New endpoint to get genres
     @GET("genre/movie/list")
     suspend fun getMovieGenres(
         @Query("api_key") apiKey: String,

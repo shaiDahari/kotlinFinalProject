@@ -8,6 +8,7 @@ import com.example.nsamovie.data.model.Movie
 import com.example.nsamovie.network.TMDBApiService
 import com.example.nsamovie.network.model.TMDBGenre
 import com.example.nsamovie.network.model.TMDBGenreResponse
+import com.example.nsamovie.network.model.TMDBMovieResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,9 +21,10 @@ class MovieRepository @Inject constructor(
     private val apiKey: String = context.getString(R.string.api_key)
     private var genres: List<TMDBGenre> = emptyList()
 
-    suspend fun getGenres() {
+    suspend fun getGenres(): List<TMDBGenre>? {
         val response: TMDBGenreResponse = apiService.getMovieGenres(apiKey)
         genres = response.genres
+        return genres
     }
 
     fun getGenreNameById(id: Int): String {
@@ -39,12 +41,12 @@ class MovieRepository @Inject constructor(
 
     suspend fun getMovieById(movieId: Int): Movie? = movieDao.getMovieById(movieId)
 
-    suspend fun getRecommendedMovies(movieId: Int) =
+    suspend fun getRecommendedMovies(movieId: Int): TMDBMovieResponse =
         apiService.getRecommendedMovies(movieId, apiKey)
 
-    suspend fun searchMovies(query: String) =
+    suspend fun searchMovies(query: String): TMDBMovieResponse =
         apiService.searchMovies(apiKey, query)
 
-    suspend fun getPopularMovies(language: String = "en-US", page: Int = 1) =
+    suspend fun getPopularMovies(language: String = "en-US", page: Int = 1): TMDBMovieResponse =
         apiService.getPopularMovies(apiKey, language, page)
 }

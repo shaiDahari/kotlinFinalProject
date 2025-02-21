@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nsamovie.data.model.Movie
-import com.example.nsamovie.data.repository.MovieRepository
 import com.example.nsamovie.network.model.TMDBMovie
+import com.example.nsamovie.data.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,7 +38,10 @@ class MoviesViewModel @Inject constructor(
     private fun fetchGenres() {
         viewModelScope.launch {
             try {
-                repository.getGenres()
+                val genres = repository.getGenres()
+                genres?.forEach { genre ->
+                    genreMap[genre.id] = genre.name
+                }
             } catch (e: Exception) {
                 Log.e("MoviesViewModel", "Error fetching genres: ${e.localizedMessage}")
             }
@@ -46,15 +49,14 @@ class MoviesViewModel @Inject constructor(
     }
 
     fun getGenreNameById(id: Int): String {
-        return repository.getGenreNameById(id)
+        return genreMap[id] ?: "Unknown Genre"
     }
 
-    fun fetchMovies( language: String = "en-US", page: Int = 1) {
+    fun fetchMovies(language: String = "en-US", page: Int = 1) {
         viewModelScope.launch {
             try {
-                val response = repository.getPopularMovies(language,page)
+                val response = repository.getPopularMovies(language, page)
                 val movies = response.movies.map { convertTMDBMovieToMovie(it) }
-
 
                 movies.forEach { movie ->
                     repository.insertMovie(movie)
@@ -104,7 +106,6 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
-
     fun updateMovie(movie: Movie) {
         viewModelScope.launch {
             try {
@@ -145,8 +146,8 @@ class MoviesViewModel @Inject constructor(
             releaseDate = tmdbMovie.releaseDate ?: "N/A",
             posterPath = "https://image.tmdb.org/t/p/w500" + (tmdbMovie.posterPath ?: ""),
             rating = tmdbMovie.voteAverage ?: 0.0,
-            genre = tmdbMovie.genreIds.map { getGenreNameById(it) }, // Map genre IDs to names
-            overview = tmdbMovie.overview ?: "No overview available"
+            genre = tmdbMovie.genreIds?.map { getGenreNameById(it) } ?: emptyList(),
+            overview = tmdbMovie.overview ?: ""
         )
     }
 }
