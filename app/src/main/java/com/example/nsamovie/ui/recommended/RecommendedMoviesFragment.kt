@@ -15,6 +15,8 @@ import com.example.nsamovie.ui.adapter.SmallMovieAdapter
 import com.example.nsamovie.ui.viewmodel.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+
+
 @AndroidEntryPoint
 class RecommendedMoviesFragment : Fragment() {
 
@@ -48,18 +50,24 @@ class RecommendedMoviesFragment : Fragment() {
         highRatedAdapter = SmallMovieAdapter(
             movies = mutableListOf(),
             onMovieClick = { movieId ->
-                val action = RecommendedMoviesFragmentDirections
-                    .actionRecommendedMoviesFragmentToRatingsFragment(movieId)
-                findNavController().navigate(action)
+                findNavController().navigate(
+                    R.id.action_recommendedMoviesFragment_to_ratingsFragment,
+                    Bundle().apply {
+                        putInt("movieId", movieId)
+                    }
+                )
             }
         )
 
         newReleasesAdapter = SmallMovieAdapter(
             movies = mutableListOf(),
             onMovieClick = { movieId ->
-                val action = RecommendedMoviesFragmentDirections
-                    .actionRecommendedMoviesFragmentToRatingsFragment(movieId)
-                findNavController().navigate(action)
+                findNavController().navigate(
+                    R.id.action_recommendedMoviesFragment_to_ratingsFragment,
+                    Bundle().apply {
+                        putInt("movieId", movieId)
+                    }
+                )
             }
         )
 
@@ -87,9 +95,9 @@ class RecommendedMoviesFragment : Fragment() {
     private fun setupListeners() {
         binding.btnSearchMovies.setOnClickListener {
             try {
-                val action = RecommendedMoviesFragmentDirections
-                    .actionRecommendedMoviesFragmentToSearchMoviesFragment(-1)
-                findNavController().navigate(action)
+                findNavController().navigate(
+                    R.id.action_recommendedMoviesFragment_to_searchMoviesFragment
+                )
             } catch (e: Exception) {
                 Log.e("RecommendedMovies", "Navigation failed", e)
             }

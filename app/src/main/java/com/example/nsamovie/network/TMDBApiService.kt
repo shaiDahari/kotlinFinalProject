@@ -12,7 +12,8 @@ interface TMDBApiService {
     suspend fun getPopularMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String = "en-US",
-        @Query("page") page: Int = 1
+        @Query("page") page: Int = 1,
+        @Query("region") region: String? = null
     ): TMDBMovieResponse
 
     @GET("movie/{movie_id}/recommendations")

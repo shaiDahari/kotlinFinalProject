@@ -18,17 +18,17 @@
         <action
             android:id="@+id/action_recommendedMoviesFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
-        <action
-            android:id="@+id/action_recommendedMoviesFragment_to_searchMoviesFragment6"
-            app:destination="@id/searchMoviesFragment"
-           />
     </fragment>
 
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.nsamovie.ui.favorites.FavoritesFragment"
         android:label="@string/favorites_movies"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_ratingsFragment"
+            app:destination="@id/ratingsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/ratingsFragment"
@@ -48,10 +48,6 @@
         android:name="com.example.nsamovie.ui.search.SearchMoviesFragment"
         android:label="@string/search_movies"
         tools:layout="@layout/fragment_search_movies" >
-        <argument
-            android:name="movieId"
-            android:defaultValue="-1"
-            app:argType="integer" />
         <action
             android:id="@+id/action_searchMoviesFragment_to_ratingsFragment"
             app:destination="@id/ratingsFragment" />

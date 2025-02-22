@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.nsamovie.databinding.ItemMovieBinding
 import com.example.nsamovie.data.model.Movie
 
+import com.bumptech.glide.Glide
+
+
 class MoviesHorizontalAdapter(
     private val movies: List<Movie>,
     private val onMovieClick: (Movie) -> Unit
@@ -27,7 +30,12 @@ class MoviesHorizontalAdapter(
     inner class MovieViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
             binding.movieTitle.text = movie.title
-            binding.moviePoster.setImageURI(movie.posterPath?.let { android.net.Uri.parse(it) })
+
+            // השתמש ב-Glide לטעינת התמונה
+            Glide.with(binding.moviePoster.context)
+                .load(movie.posterPath) // Assumes posterPath is a valid URL
+                .into(binding.moviePoster)
+
             binding.root.setOnClickListener { onMovieClick(movie) }
         }
     }

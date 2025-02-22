@@ -34,8 +34,6 @@
             android:contentDescription="@string/movie_poster"
             android:layout_marginBottom="12dp"/>
 
-
-
         <TextView
             android:id="@+id/textViewMovieReleaseDate"
             android:layout_width="wrap_content"
@@ -96,5 +94,13 @@
             android:backgroundTint="@color/white"
             android:textColor="@color/black"
             android:layout_marginBottom="12dp"/>
+
+        <!-- Button to navigate to favorites -->
+        <Button
+            android:id="@+id/buttonGoToFavorites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Go to Favorites"
+            android:layout_marginTop="12dp"/>
     </LinearLayout>
 </ScrollView>

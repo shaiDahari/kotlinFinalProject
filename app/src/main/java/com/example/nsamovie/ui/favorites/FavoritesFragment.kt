@@ -13,6 +13,11 @@ import com.example.nsamovie.ui.adapter.MovieAdapter
 import com.example.nsamovie.ui.viewmodel.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+import androidx.navigation.fragment.findNavController
+
+import com.example.nsamovie.R
+
+
 @AndroidEntryPoint
 class FavoritesFragment : Fragment() {
 
@@ -39,7 +44,14 @@ class FavoritesFragment : Fragment() {
 
     private fun setupRecyclerView() {
         movieAdapter = MovieAdapter(
-            onMovieClick = {  },
+            onMovieClick = { movie ->
+                findNavController().navigate(
+                    R.id.action_favoritesFragment_to_ratingsFragment,
+                    Bundle().apply {
+                        putInt("movieId", movie.id)
+                    }
+                )
+            }
         )
 
         binding.recyclerViewFavorites.apply {

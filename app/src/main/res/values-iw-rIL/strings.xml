@@ -24,34 +24,89 @@
     <string name="msg_error">אירעה שגיאה. אנא נסה שוב!</string>
 
     <!-- רמזים -->
-    <string name="hint_movie_title">הכנס את כותרת הסרט</string>
-    <string name="hint_movie_genre">הכנס את גאנר הסרט</string>
-    <string name="hint_movie_director">הכנס את שם הבמאי</string>
-    <string name="hint_movie_release_date">הכנס את שנת ההפצה</string>
+    <string name="hint_movie_title">הכנס כותרת סרט</string>
+    <string name="hint_movie_genre">הכנס ז\'אנר</string>
+    <string name="hint_movie_director">הכנס שם במאי</string>
+    <string name="hint_movie_release_date">הכנס שנת הפצה</string>
     <string name="hint_movie_description">כתוב תיאור קצר</string>
     <string name="hint_movie_rating">דרג מ-1 עד 5</string>
 
     <!-- שגיאות -->
-    <string name="error_empty_title">בבקשה הכנס כותרת</string>
-    <string name="error_empty_director">בבקשה הכנס במאי</string>
-    <string name="error_invalid_date">בבקשה הכנס תאריך תקין</string>
+    <string name="error_empty_title">אנא הכנס כותרת</string>
+    <string name="error_empty_director">אנא הכנס במאי</string>
+    <string name="error_invalid_date">אנא הכנס תאריך תקין</string>
 
-    <!-- Misc -->
+    <!-- כללי -->
     <string name="favorites_movies">סרטים מועדפים</string>
     <string name="recommended_movies">סרטים מומלצים</string>
     <string name="ratings_and_reviews">דירוגים וביקורות</string>
     <string name="favorites">מועדפים</string>
     <string name="favorite">מועדף</string>
     <string name="not_favorite">לא מועדף</string>
-    <string name="gallery_access_required">נדרשת הרשאה לגלריה לבחירת תמונות</string>
+    <string name="gallery_access_required">נדרשת גישה לגלריה לבחירת תמונות</string>
 
     <!-- כותרות -->
-    <string name="title_add_movie">הוספת סרט</string>
-    <string name="title_edit_movie">עריכת סרט</string>
+    <string name="title_add_movie">הוסף סרט</string>
+    <string name="title_edit_movie">ערוך סרט</string>
     <string name="title_movie_details">פרטי סרט</string>
     <string name="title_movie_list">רשימת סרטים</string>
 
-    <!-- סטרינגים נוספים -->
+    <!-- מחרוזות נוספות -->
     <string name="movie_poster">פוסטר הסרט</string>
     <string name="search_movies">חיפוש סרטים</string>
+    <string name="categories">קטגוריות</string>
+    <string name="location">מיקום</string>
+    <string name="new_releases">סרטים חדשים</string>
+    <string name="movie_not_found">הסרט לא נמצא</string>
+
+    <!-- מחרוזות חיפוש -->
+    <string name="search_movies_hint">הקלד שם סרט לחיפוש</string>
+    <string name="no_results_found">לא נמצאו תוצאות</string>
+    <string name="select_date">בחר תאריך</string>
+    <string name="select_country">בחר מדינה</string>
+    <string name="loading">טוען...</string>
+    <string name="select_year_range">בחר טווח שנים</string>
+    <string name="from_year">משנה</string>
+    <string name="to_year">עד שנה</string>
+    <string name="apply">אישור</string>
+
+    <!-- מערכי מדינות -->
+    <string-array name="countries">
+        <item>ארצות הברית</item>
+        <item>בריטניה</item>
+        <item>צרפת</item>
+        <item>גרמניה</item>
+        <item>יפן</item>
+        <item>דרום קוריאה</item>
+        <item>הודו</item>
+        <item>איטליה</item>
+        <item>ספרד</item>
+        <item>ישראל</item>
+    </string-array>
+
+    <string-array name="country_codes">
+        <item>US</item>
+        <item>GB</item>
+        <item>FR</item>
+        <item>DE</item>
+        <item>JP</item>
+        <item>KR</item>
+        <item>IN</item>
+        <item>IT</item>
+        <item>ES</item>
+        <item>IL</item>
+    </string-array>
+
+    <string-array name="language_codes">
+        <item>en</item>
+        <item>en</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>ja</item>
+        <item>ko</item>
+        <item>hi</item>
+        <item>it</item>
+        <item>es</item>
+        <item>he</item>
+    </string-array>
 </resources>

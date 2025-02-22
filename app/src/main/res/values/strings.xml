@@ -59,4 +59,55 @@
     <string name="location">Location</string>
     <string name="new_releases">New Releases</string>
     <string name="movie_not_found">Movie not found</string>
+
+    <!-- Search strings -->
+    <string name="search_movies_hint">Enter movie name to search</string>
+    <string name="no_results_found">No results found</string>
+    <string name="select_date">Select date</string>
+    <string name="select_country">Select Country</string>
+    <string name="loading">Loading...</string>
+    <string name="select_year_range">Select Year Range</string>
+    <string name="from_year">From</string>
+    <string name="to_year">To</string>
+    <string name="apply">Apply</string>
+
+    <!-- Country arrays -->
+    <string-array name="countries">
+        <item>United States</item>
+        <item>United Kingdom</item>
+        <item>France</item>
+        <item>Germany</item>
+        <item>Japan</item>
+        <item>South Korea</item>
+        <item>India</item>
+        <item>Italy</item>
+        <item>Spain</item>
+        <item>Israel</item>
+    </string-array>
+
+    <string-array name="country_codes">
+        <item>US</item>
+        <item>GB</item>
+        <item>FR</item>
+        <item>DE</item>
+        <item>JP</item>
+        <item>KR</item>
+        <item>IN</item>
+        <item>IT</item>
+        <item>ES</item>
+        <item>IL</item>
+    </string-array>
+
+    <string-array name="language_codes">
+        <item>en</item>
+        <item>en</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>ja</item>
+        <item>ko</item>
+        <item>hi</item>
+        <item>it</item>
+        <item>es</item>
+        <item>he</item>
+    </string-array>
 </resources>

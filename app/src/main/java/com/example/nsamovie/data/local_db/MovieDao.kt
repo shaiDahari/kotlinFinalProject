@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.nsamovie.data.model.Movie
 
+
 @Dao
 interface MovieDao {
 
@@ -15,6 +16,9 @@ interface MovieDao {
 
     @Query("SELECT * FROM movies")
     fun getAllMovies(): LiveData<List<Movie>>
+
+    @Query("SELECT * FROM movies")
+    suspend fun getAllMoviesAsList(): List<Movie>
 
     @Query("SELECT * FROM movies WHERE favorites = 1")
     fun getFavoriteMovies(): LiveData<List<Movie>>

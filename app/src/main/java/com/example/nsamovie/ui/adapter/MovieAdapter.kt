@@ -10,6 +10,9 @@ import com.example.nsamovie.R
 import com.example.nsamovie.data.model.Movie
 import com.example.nsamovie.databinding.ItemMovieBinding
 
+import com.bumptech.glide.Glide
+
+
 class MovieAdapter(
     private val onMovieClick: (Movie) -> Unit,
 ) : ListAdapter<Movie, MovieAdapter.MovieViewHolder>(MovieDiffCallback()) {
@@ -34,14 +37,15 @@ class MovieAdapter(
         fun bind(movie: Movie) {
             binding.apply {
                 movieTitle.text = movie.title
-                movieGenre.text = movie.genre.toString()
+                movieGenre.text = movie.genre.joinToString(", ")
                 movieRatingText.text = movie.rating.toString()
 
-                if (!movie.posterPath.isNullOrEmpty()) {
-                    moviePoster.setImageURI(Uri.parse(movie.posterPath))
-                } else {
-                    moviePoster.setImageResource(R.drawable.ic_movie_placeholder)
-                }
+                // שימוש ב-Glide לטעינת התמונה
+                Glide.with(binding.root.context)
+                    .load(movie.posterPath)
+                    .placeholder(R.drawable.ic_movie_placeholder)
+                    .error(R.drawable.ic_movie_placeholder)
+                    .into(moviePoster)
 
                 root.setOnClickListener { onMovieClick(movie) }
             }
