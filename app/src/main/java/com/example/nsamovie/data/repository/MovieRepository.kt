@@ -12,11 +12,10 @@ import com.example.nsamovie.network.model.TMDBMovie
 import com.example.nsamovie.network.model.TMDBMovieResponse
 import javax.inject.Inject
 import javax.inject.Singleton
-
+import java.util.Locale
 import android.util.Log
 
 @Singleton
-
 class MovieRepository @Inject constructor(
     private val movieDao: MovieDao,
     private val apiService: TMDBApiService,
@@ -27,7 +26,7 @@ class MovieRepository @Inject constructor(
     private val TAG = "MovieRepository"
 
     suspend fun getGenres(currentLanguage: String): List<TMDBGenre>? {
-        val response: TMDBGenreResponse = apiService.getMovieGenres(apiKey)
+        val response: TMDBGenreResponse = apiService.getMovieGenres(apiKey, language = currentLanguage)
         genres = response.genres
         return genres
     }
@@ -40,22 +39,23 @@ class MovieRepository @Inject constructor(
 
     fun getFavoriteMovies(): LiveData<List<Movie>> = movieDao.getFavoriteMovies()
 
-    suspend fun getPopularMovies(language: String = "en-US", page: Int = 1, region: String? = null): List<Movie> {
+    suspend fun getPopularMovies(
+        language: String = "en-US",
+        page: Int = 1,
+        region: String? = null
+    ): List<Movie> {
         return try {
             val response = apiService.getPopularMovies(apiKey, language, page, region)
-            Log.d(TAG, "API Response: ${response.movies.size} movies")
-
+            Log.d(TAG, "API Response: ${response.movies.size} movies for region: $region, language: $language")
+            Log.d(TAG, "Raw API Response: ${response.movies}")
             val moviesFromApi = response.movies.map { tmdbMovie ->
-                Log.d(TAG, "Original posterPath: ${tmdbMovie.posterPath}")
+                Log.d(TAG, "Movie Title: ${tmdbMovie.title}, Region: $region")
                 val existingMovie = movieDao.getMovieById(tmdbMovie.id)
                 convertTMDBMovieToMovie(tmdbMovie, existingMovie?.favorites ?: false)
             }
-
             moviesFromApi.forEach { movie ->
-                Log.d(TAG, "Final posterPath: ${movie.posterPath}")
                 movieDao.insertMovie(movie)
             }
-
             moviesFromApi
         } catch (e: Exception) {
             Log.e(TAG, "Error fetching movies: ${e.message}")
@@ -63,31 +63,43 @@ class MovieRepository @Inject constructor(
         }
     }
 
+    suspend fun getMoviesBasedOnLocale(): List<TMDBMovie>? {
+        val currentLocale = Locale.getDefault()
+        val languageCode = currentLocale.language // e.g., "he", "en"
+        val regionCode = currentLocale.country     // e.g., "IL", "US"
+
+        Log.d(TAG, "Fetching movies for region: $regionCode, language: $languageCode")
+
+        return try {
+            // Use getPopularMovies with locale parameters
+            val response = apiService.getPopularMovies(apiKey, languageCode, page = 1, region = regionCode)
+            response.movies
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching movies by locale: ${e.message}")
+            null
+        }
+    }
 
     suspend fun updateMovie(movie: Movie) = movieDao.updateMovie(movie)
 
     suspend fun getMovieById(movieId: Int): Movie? = movieDao.getMovieById(movieId)
 
     suspend fun getRecommendedMovies(movieId: Int, currentLanguage: String): TMDBMovieResponse =
-        apiService.getRecommendedMovies(movieId, apiKey)
+        apiService.getRecommendedMovies(movieId, apiKey, language = currentLanguage)
 
     suspend fun searchMovies(query: String, currentLanguage: String): TMDBMovieResponse {
-        val response = apiService.searchMovies(apiKey, query)
-
-        // Convert and insert each movie into Room
+        val response = apiService.searchMovies(apiKey, query, language = currentLanguage)
         val movies = response.movies.map { tmdbMovie ->
             convertTMDBMovieToMovie(tmdbMovie)
         }
-
-        // Insert movies into Room
         movies.forEach { movie ->
             movieDao.insertMovie(movie)
         }
-
         return response
     }
 
-    private fun convertTMDBMovieToMovie(tmdbMovie: TMDBMovie, isFavorite: Boolean = false): Movie {
+    // Make this conversion function public so it can be used by the ViewModel.
+    fun convertTMDBMovieToMovie(tmdbMovie: TMDBMovie, isFavorite: Boolean = false): Movie {
         val baseImageUrl = "https://image.tmdb.org/t/p/w500"
         val posterPath = if (!tmdbMovie.posterPath.isNullOrEmpty()) {
             if (tmdbMovie.posterPath.startsWith("/")) {
@@ -98,11 +110,9 @@ class MovieRepository @Inject constructor(
         } else {
             ""
         }
-
         Log.d(TAG, "Converting movie: ${tmdbMovie.title}")
         Log.d(TAG, "Original poster path: ${tmdbMovie.posterPath}")
         Log.d(TAG, "Final poster path: $posterPath")
-
         return Movie(
             id = tmdbMovie.id,
             title = tmdbMovie.title,

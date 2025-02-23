@@ -5,6 +5,8 @@ import com.example.nsamovie.network.model.TMDBMovieResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.Response
+
 
 interface TMDBApiService {
 
@@ -37,4 +39,13 @@ interface TMDBApiService {
         @Query("api_key") apiKey: String,
         @Query("language") language: String = "en-US"  // Default language (fallback)
     ): TMDBGenreResponse
+
+    // ✅ Added function to fetch movies dynamically based on locale
+    @GET("discover/movie")
+    suspend fun getMoviesBasedOnLocale(
+        @Query("region") region: String?,
+        @Query("language") language: String,
+        @Query("api_key") apiKey: String
+    ): Response<TMDBMovieResponse>
+
 }

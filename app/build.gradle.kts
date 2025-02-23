@@ -61,6 +61,9 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation("com.google.code.gson:gson:2.12.1")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+
 
     // בחלק של dependencies הוסף:
     // Glide

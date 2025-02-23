@@ -11,6 +11,9 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovie(movie: Movie)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMovies(movies: List<Movie>) // ✅ Batch Insert
+
     @Delete
     suspend fun deleteMovie(movie: Movie)
 
