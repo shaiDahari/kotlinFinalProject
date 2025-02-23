@@ -11,7 +11,7 @@ interface TMDBApiService {
     @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("api_key") apiKey: String,
-        @Query("language") language: String = "en-US",
+        @Query("language") language: String = "en-US",  // Default language (fallback)
         @Query("page") page: Int = 1,
         @Query("region") region: String? = null
     ): TMDBMovieResponse
@@ -20,7 +20,7 @@ interface TMDBApiService {
     suspend fun getRecommendedMovies(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String,
-        @Query("language") language: String = "en-US",
+        @Query("language") language: String = "en-US",  // Default language (fallback)
         @Query("page") page: Int = 1
     ): TMDBMovieResponse
 
@@ -28,13 +28,13 @@ interface TMDBApiService {
     suspend fun searchMovies(
         @Query("api_key") apiKey: String,
         @Query("query") query: String,
-        @Query("language") language: String = "en-US",
+        @Query("language") language: String = "en-US",  // Default language (fallback)
         @Query("page") page: Int = 1
     ): TMDBMovieResponse
 
     @GET("genre/movie/list")
     suspend fun getMovieGenres(
         @Query("api_key") apiKey: String,
-        @Query("language") language: String = "en-US"
+        @Query("language") language: String = "en-US"  // Default language (fallback)
     ): TMDBGenreResponse
 }

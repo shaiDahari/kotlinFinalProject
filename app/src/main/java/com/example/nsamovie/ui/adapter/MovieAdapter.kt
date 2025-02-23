@@ -38,7 +38,7 @@ class MovieAdapter(
             binding.apply {
                 movieTitle.text = movie.title
                 movieGenre.text = movie.genre.joinToString(", ")
-                movieRatingText.text = movie.rating.toString()
+                movieRatingText.text = String.format("%.1f/10", movie.rating)
 
                 // שימוש ב-Glide לטעינת התמונה
                 Glide.with(binding.root.context)

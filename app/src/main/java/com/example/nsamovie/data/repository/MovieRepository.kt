@@ -12,12 +12,11 @@ import com.example.nsamovie.network.model.TMDBMovie
 import com.example.nsamovie.network.model.TMDBMovieResponse
 import javax.inject.Inject
 import javax.inject.Singleton
-import androidx.lifecycle.*
-import kotlinx.coroutines.launch
 
 import android.util.Log
 
 @Singleton
+
 class MovieRepository @Inject constructor(
     private val movieDao: MovieDao,
     private val apiService: TMDBApiService,
@@ -27,7 +26,7 @@ class MovieRepository @Inject constructor(
     private var genres: List<TMDBGenre> = emptyList()
     private val TAG = "MovieRepository"
 
-    suspend fun getGenres(): List<TMDBGenre>? {
+    suspend fun getGenres(currentLanguage: String): List<TMDBGenre>? {
         val response: TMDBGenreResponse = apiService.getMovieGenres(apiKey)
         genres = response.genres
         return genres
@@ -64,19 +63,31 @@ class MovieRepository @Inject constructor(
         }
     }
 
-    suspend fun insertMovie(movie: Movie) = movieDao.insertMovie(movie)
 
     suspend fun updateMovie(movie: Movie) = movieDao.updateMovie(movie)
 
     suspend fun getMovieById(movieId: Int): Movie? = movieDao.getMovieById(movieId)
 
-    suspend fun getRecommendedMovies(movieId: Int): TMDBMovieResponse =
+    suspend fun getRecommendedMovies(movieId: Int, currentLanguage: String): TMDBMovieResponse =
         apiService.getRecommendedMovies(movieId, apiKey)
 
-    suspend fun searchMovies(query: String): TMDBMovieResponse =
-        apiService.searchMovies(apiKey, query)
+    suspend fun searchMovies(query: String, currentLanguage: String): TMDBMovieResponse {
+        val response = apiService.searchMovies(apiKey, query)
 
-    private fun convertTMDBMovieToMovie(tmdbMovie: com.example.nsamovie.network.model.TMDBMovie, isFavorite: Boolean = false): Movie {
+        // Convert and insert each movie into Room
+        val movies = response.movies.map { tmdbMovie ->
+            convertTMDBMovieToMovie(tmdbMovie)
+        }
+
+        // Insert movies into Room
+        movies.forEach { movie ->
+            movieDao.insertMovie(movie)
+        }
+
+        return response
+    }
+
+    private fun convertTMDBMovieToMovie(tmdbMovie: TMDBMovie, isFavorite: Boolean = false): Movie {
         val baseImageUrl = "https://image.tmdb.org/t/p/w500"
         val posterPath = if (!tmdbMovie.posterPath.isNullOrEmpty()) {
             if (tmdbMovie.posterPath.startsWith("/")) {
@@ -102,5 +113,11 @@ class MovieRepository @Inject constructor(
             overview = tmdbMovie.overview ?: "",
             favorites = isFavorite
         )
+    }
+
+    suspend fun insertMovies(movies: List<Movie>) {
+        movies.forEach {
+            movieDao.insertMovie(it)
+        }
     }
 }

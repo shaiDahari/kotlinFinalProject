@@ -21,10 +21,11 @@
 
         <TextView
             android:id="@+id/movieTitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,27 +34,21 @@
 
             <TextView
                 android:id="@+id/movieGenre"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:layout_weight="0.5"
-                android:padding="1dp"/>
-
-            <TextView
-                android:id="@+id/movieYear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_weight="0.5"
-                android:padding="1dp"/>
+                android:padding="1dp"
+                android:textColor="@android:color/white"/>
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/movieDirector"
-            android:layout_width="match_parent"
+            android:id="@+id/movieYear"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="4dp"
+            android:padding="1dp"
+            android:textColor="@android:color/white"/>
 
         <!-- Rating (X/10 with star) -->
         <LinearLayout
@@ -68,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textStyle="bold" />
 
             <ImageView
@@ -80,6 +75,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 </LinearLayout>
