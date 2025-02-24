@@ -86,7 +86,7 @@ class MovieRepository @Inject constructor(
     suspend fun getMoviesByOriginCountry(countryCode: String): List<Movie> {
         return try {
             // Fetch movies by origin country
-            val response = apiService.getMoviesByOriginCountry(apiKey, countryCode)
+            val response = apiService.getMoviesByOriginCountry(apiKey, getCurrentLanguage()  ,countryCode)
 
             // Pre-fetch genres in the correct language
             val languageCode = getCurrentLanguage()

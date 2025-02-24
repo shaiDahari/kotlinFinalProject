@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nsamovie.data.model.Movie
-import com.example.nsamovie.network.model.TMDBMovie
 import com.example.nsamovie.data.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -35,7 +34,6 @@ class MoviesViewModel @Inject constructor(
     val newReleasesMovies: LiveData<List<Movie>> = _newReleasesMovies
 
     private val _genreMap = MutableLiveData<Map<Int, String>>()
-    val genreMapLiveData: LiveData<Map<Int, String>> = _genreMap
 
     init {
         fetchGenres()
@@ -45,7 +43,7 @@ class MoviesViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val genres = repository.getGenres(getCurrentLanguage())
-                val genreMapping = genres?.associateBy({ it.id }, { it.name }) ?: emptyMap()
+                val genreMapping = genres.associateBy({ it.id }, { it.name })
                 _genreMap.postValue(genreMapping)
                 Log.d("MoviesViewModel", "Genres fetched successfully: ${genreMapping.size}")
             } catch (e: Exception) {
@@ -56,7 +54,11 @@ class MoviesViewModel @Inject constructor(
 
     private fun getCurrentLanguage(): String {
         val locale = Locale.getDefault()
-        return if (locale.language == "iw") "he-IL" else locale.toLanguageTag()
+        return when (locale.language) {
+            "iw", "he" -> "he-IL"  // Hebrew
+            "en" -> "${locale.language}-${locale.country}"  // e.g., en-US
+            else -> locale.toLanguageTag()
+        }
     }
 
     fun fetchMovies(page: Int = 1) {
