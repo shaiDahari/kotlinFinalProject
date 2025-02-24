@@ -77,8 +77,7 @@ class SearchMoviesFragment : Fragment() {
             }
         }
 
-        // Remove the automatic loadMovies() call if you don't want an initial list:
-        // viewModel.loadMovies() // <-- Remove or comment out this line
+
     }
 
 
@@ -183,64 +182,38 @@ class SearchMoviesFragment : Fragment() {
 
     private fun getLocationAndSearchMovies() {
         Log.d("SearchMoviesFragment", "Fetching location...")
+
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.e("SearchMoviesFragment", "Location permission not granted! Requesting again.")
-            Toast.makeText(requireContext(), "Location permission is required", Toast.LENGTH_SHORT).show()
+            // Request permission if not granted
             requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
             return
         }
-        if (!::fusedLocationProviderClient.isInitialized) {
-            Log.e("SearchMoviesFragment", "fusedLocationProviderClient is not initialized!")
-            Toast.makeText(requireContext(), "Location service is not initialized", Toast.LENGTH_SHORT).show()
-            return
-        }
-        try {
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                if (location != null) {
-                    Log.d("SearchMoviesFragment", "Location retrieved: Lat=${location.latitude}, Lon=${location.longitude}")
-                    lifecycleScope.launch {
-                        try {
-                            if (!Geocoder.isPresent()) {
-                                Log.e("SearchMoviesFragment", "Geocoder not available on this device!")
-                                Toast.makeText(requireContext(), "Geocoder not available", Toast.LENGTH_SHORT).show()
-                                return@launch
-                            }
-                            val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                            val addresses = withContext(Dispatchers.IO) {
-                                try {
-                                    geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                                } catch (e: IOException) {
-                                    Log.e("SearchMoviesFragment", "Geocoder failed: ${e.message}")
-                                    null
-                                }
-                            }
-                            val countryCode = addresses?.firstOrNull()?.countryCode
-                            if (countryCode != null) {
-                                Log.d("SearchMoviesFragment", "Country code detected: $countryCode")
-                                val languageCode = Locale.getDefault().toLanguageTag()
-                                Log.d("SearchMoviesFragment", "Language code detected: $languageCode")
-                                viewModel.searchMoviesByRegionAndLanguage( language = languageCode)
-                                showLoadingState()
-                            } else {
-                                Log.e("SearchMoviesFragment", "Unable to determine country code")
-                                Toast.makeText(requireContext(), "Unable to determine country code", Toast.LENGTH_SHORT).show()
-                            }
-                        } catch (e: IOException) {
-                            Log.e("SearchMoviesFragment", "Failed to retrieve location: ${e.message}")
-                            Toast.makeText(requireContext(), "Failed to retrieve location", Toast.LENGTH_SHORT).show()
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                Log.d("SearchMoviesFragment", "Location retrieved: Lat=${location.latitude}, Lon=${location.longitude}")
+                lifecycleScope.launch {
+                    try {
+                        if (!Geocoder.isPresent()) {
+                            Log.e("SearchMoviesFragment", "Geocoder not available!")
+                            return@launch
                         }
+                        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                        val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                        val countryCode = addresses?.firstOrNull()?.countryCode
+                        if (countryCode != null) {
+                            Log.d("SearchMoviesFragment", "Country code detected: $countryCode")
+                            // Pass the country code to the ViewModel to fetch movies
+                            viewModel.fetchMoviesByCountryCode(countryCode)
+                        } else {
+                            Log.e("SearchMoviesFragment", "Unable to determine country code")
+                        }
+                    } catch (e: IOException) {
+                        Log.e("SearchMoviesFragment", "Failed to retrieve location: ${e.message}")
                     }
-                } else {
-                    Log.e("SearchMoviesFragment", "Location not available, requesting new location...")
-                    requestNewLocation()
                 }
-            }.addOnFailureListener { exception ->
-                Log.e("SearchMoviesFragment", "Error retrieving location: ${exception.message}")
-                Toast.makeText(requireContext(), "Error retrieving location: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
-        } catch (e: SecurityException) {
-            Log.e("SearchMoviesFragment", "Security Exception: ${e.message}")
-            Toast.makeText(requireContext(), "Security Exception: Location access denied", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -276,20 +249,7 @@ class SearchMoviesFragment : Fragment() {
         }
     }
 
-    private fun showResults() {
-        binding.apply {
-            recyclerViewMovies.visibility = View.VISIBLE
-            emptyStateText.visibility = View.GONE
-        }
-    }
 
-    private fun showEmptyState() {
-        binding.apply {
-            recyclerViewMovies.visibility = View.GONE
-            emptyStateText.visibility = View.VISIBLE
-            emptyStateText.text = getString(R.string.no_results_found)
-        }
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray

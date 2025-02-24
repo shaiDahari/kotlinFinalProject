@@ -36,4 +36,10 @@ interface TMDBApiService {
         @Query("api_key") apiKey: String,
         @Query("language") language: String
     ): TMDBGenreResponse
+
+    @GET("discover/movie")
+    suspend fun getMoviesByOriginCountry(
+        @Query("api_key") apiKey: String,
+        @Query("with_origin_country") countryCode: String
+    ): TMDBMovieResponse
 }

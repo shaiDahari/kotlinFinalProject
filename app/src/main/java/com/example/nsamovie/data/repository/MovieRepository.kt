@@ -25,8 +25,9 @@ class MovieRepository @Inject constructor(
     private var genres: List<TMDBGenre> = emptyList()
     private val TAG = "MovieRepository"
 
-    suspend fun getGenres(currentLanguage: String): List<TMDBGenre>? {
-        val response: TMDBGenreResponse = apiService.getMovieGenres(apiKey, language = currentLanguage)
+    suspend fun getGenres(currentLanguage: String): List<TMDBGenre> {
+        val response: TMDBGenreResponse =
+            apiService.getMovieGenres(apiKey, language = currentLanguage)
         genres = response.genres
         return genres
     }
@@ -81,12 +82,43 @@ class MovieRepository @Inject constructor(
         return locale.country.uppercase()
     }
 
+
+    suspend fun getMoviesByOriginCountry(countryCode: String): List<Movie> {
+        return try {
+            // Fetch movies by origin country
+            val response = apiService.getMoviesByOriginCountry(apiKey, countryCode)
+
+            // Pre-fetch genres in the correct language
+            val languageCode = getCurrentLanguage()
+            getGenres(languageCode)
+
+            val moviesFromApi = response.movies.map { tmdbMovie ->
+                val existingMovie = movieDao.getMovieById(tmdbMovie.id)
+                convertTMDBMovieToMovie(
+                    tmdbMovie = tmdbMovie,
+                    isFavorite = existingMovie?.favorites ?: false
+                )
+            }
+
+            // Batch insert all movies
+            movieDao.insertMovies(moviesFromApi)
+
+            Log.d(
+                TAG,
+                "Successfully processed ${moviesFromApi.size} movies for country $countryCode"
+            )
+            moviesFromApi
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching movies for country $countryCode", e)
+            movieDao.getAllMoviesAsList()
+        }
+    }
+
+
     suspend fun updateMovie(movie: Movie) = movieDao.updateMovie(movie)
 
     suspend fun getMovieById(movieId: Int): Movie? = movieDao.getMovieById(movieId)
 
-    suspend fun getRecommendedMovies(movieId: Int, currentLanguage: String): TMDBMovieResponse =
-        apiService.getRecommendedMovies(movieId, apiKey, language = currentLanguage)
 
     suspend fun searchMovies(query: String, currentLanguage: String): TMDBMovieResponse {
         val response = apiService.searchMovies(apiKey, query, language = currentLanguage)

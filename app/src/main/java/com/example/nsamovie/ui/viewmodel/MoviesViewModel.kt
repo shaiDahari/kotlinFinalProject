@@ -23,6 +23,11 @@ class MoviesViewModel @Inject constructor(
     private val _movieList = MutableLiveData<List<Movie>>()
     val movieList: LiveData<List<Movie>> = _movieList
 
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> get() = _error
+
+
     private val _highRatedMovies = MutableLiveData<List<Movie>>()
     val highRatedMovies: LiveData<List<Movie>> = _highRatedMovies
 
@@ -110,21 +115,13 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
-    fun searchMoviesByRegionAndLanguage(language: String) {
-        Log.d("MoviesViewModel", "Fetching movies for language: $language")
+    fun fetchMoviesByCountryCode(countryCode: String) {
         viewModelScope.launch {
             try {
-                val response = repository.getPopularMovies(page = 1)
-                if (response.isNotEmpty()) {
-                    Log.d("MoviesViewModel", "Movies retrieved successfully: ${response.size}")
-                    _movieList.postValue(response)
-                } else {
-                    Log.w("MoviesViewModel", "No movies found for language: $language")
-                    _movieList.postValue(emptyList())
-                }
+                val moviesFromApi = repository.getMoviesByOriginCountry(countryCode)
+                _movieList.postValue(moviesFromApi)
             } catch (e: Exception) {
-                Log.e("MoviesViewModel", "Error fetching movies", e)
-                _movieList.postValue(emptyList())
+                _error.postValue("Failed to fetch movies: ${e.message}")
             }
         }
     }
