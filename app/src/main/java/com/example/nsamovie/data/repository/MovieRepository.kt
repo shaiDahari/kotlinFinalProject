@@ -35,49 +35,50 @@ class MovieRepository @Inject constructor(
         return genres.find { it.id == id }?.name ?: "Unknown"
     }
 
-    fun getAllMovies(): LiveData<List<Movie>> = movieDao.getAllMovies()
-
     fun getFavoriteMovies(): LiveData<List<Movie>> = movieDao.getFavoriteMovies()
 
-    suspend fun getPopularMovies(
-        language: String = "en-US",
-        page: Int = 1,
-        region: String? = null
-    ): List<Movie> {
+    suspend fun getPopularMovies(page: Int = 1): List<Movie> {
         return try {
-            val response = apiService.getPopularMovies(apiKey, language, page, region)
-            Log.d(TAG, "API Response: ${response.movies.size} movies for region: $region, language: $language")
-            Log.d(TAG, "Raw API Response: ${response.movies}")
+            val languageCode = getCurrentLanguage()
+            val region = getRegionCode() // Get region based on locale
+
+            Log.d(TAG, "Fetching movies with language: $languageCode, region: $region")
+
+            // Fetch movies with both language and region
+            val response = apiService.getPopularMovies(
+                apiKey = apiKey,
+                language = languageCode,
+                page = page,
+                region = region
+            )
+
+            // Pre-fetch genres in the correct language
+            getGenres(languageCode)
+
             val moviesFromApi = response.movies.map { tmdbMovie ->
-                Log.d(TAG, "Movie Title: ${tmdbMovie.title}, Region: $region")
                 val existingMovie = movieDao.getMovieById(tmdbMovie.id)
-                convertTMDBMovieToMovie(tmdbMovie, existingMovie?.favorites ?: false)
+                Log.d(TAG, "Processing movie: ${tmdbMovie.title} (ID: ${tmdbMovie.id} ")
+
+                convertTMDBMovieToMovie(
+                    tmdbMovie = tmdbMovie,
+                    isFavorite = existingMovie?.favorites ?: false
+                )
             }
-            moviesFromApi.forEach { movie ->
-                movieDao.insertMovie(movie)
-            }
+
+            // Batch insert all movies
+            movieDao.insertMovies(moviesFromApi)
+
+            Log.d(TAG, "Successfully processed ${moviesFromApi.size} movies in $languageCode")
             moviesFromApi
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching movies: ${e.message}")
+            Log.e(TAG, "Error fetching popular movies", e)
             movieDao.getAllMoviesAsList()
         }
     }
 
-    suspend fun getMoviesBasedOnLocale(): List<TMDBMovie>? {
-        val currentLocale = Locale.getDefault()
-        val languageCode = currentLocale.language // e.g., "he", "en"
-        val regionCode = currentLocale.country     // e.g., "IL", "US"
-
-        Log.d(TAG, "Fetching movies for region: $regionCode, language: $languageCode")
-
-        return try {
-            // Use getPopularMovies with locale parameters
-            val response = apiService.getPopularMovies(apiKey, languageCode, page = 1, region = regionCode)
-            response.movies
-        } catch (e: Exception) {
-            Log.e(TAG, "Error fetching movies by locale: ${e.message}")
-            null
-        }
+    private fun getRegionCode(): String {
+        val locale = Locale.getDefault()
+        return locale.country.uppercase()
     }
 
     suspend fun updateMovie(movie: Movie) = movieDao.updateMovie(movie)
@@ -98,7 +99,6 @@ class MovieRepository @Inject constructor(
         return response
     }
 
-    // Make this conversion function public so it can be used by the ViewModel.
     fun convertTMDBMovieToMovie(tmdbMovie: TMDBMovie, isFavorite: Boolean = false): Movie {
         val baseImageUrl = "https://image.tmdb.org/t/p/w500"
         val posterPath = if (!tmdbMovie.posterPath.isNullOrEmpty()) {
@@ -110,9 +110,7 @@ class MovieRepository @Inject constructor(
         } else {
             ""
         }
-        Log.d(TAG, "Converting movie: ${tmdbMovie.title}")
-        Log.d(TAG, "Original poster path: ${tmdbMovie.posterPath}")
-        Log.d(TAG, "Final poster path: $posterPath")
+
         return Movie(
             id = tmdbMovie.id,
             title = tmdbMovie.title,
@@ -128,6 +126,15 @@ class MovieRepository @Inject constructor(
     suspend fun insertMovies(movies: List<Movie>) {
         movies.forEach {
             movieDao.insertMovie(it)
+        }
+    }
+
+    private fun getCurrentLanguage(): String {
+        val locale = Locale.getDefault()
+        return when (locale.language) {
+            "iw", "he" -> "he-IL"  // Hebrew
+            "en" -> "${locale.language}-${locale.country}"  // e.g., en-US
+            else -> locale.toLanguageTag()
         }
     }
 }

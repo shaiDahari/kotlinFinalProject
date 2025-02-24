@@ -219,7 +219,7 @@ class SearchMoviesFragment : Fragment() {
                                 Log.d("SearchMoviesFragment", "Country code detected: $countryCode")
                                 val languageCode = Locale.getDefault().toLanguageTag()
                                 Log.d("SearchMoviesFragment", "Language code detected: $languageCode")
-                                viewModel.searchMoviesByRegionAndLanguage(region = countryCode, language = languageCode)
+                                viewModel.searchMoviesByRegionAndLanguage( language = languageCode)
                                 showLoadingState()
                             } else {
                                 Log.e("SearchMoviesFragment", "Unable to determine country code")

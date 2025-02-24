@@ -49,29 +49,20 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
-    fun getGenreNameById(id: Int): String {
-        return _genreMap.value?.get(id) ?: "Unknown Genre"
-    }
-
     private fun getCurrentLanguage(): String {
-        val lang = Locale.getDefault().language
-        Log.e("MoviesViewModel", "Language is: $lang")
-        return lang
+        val locale = Locale.getDefault()
+        return if (locale.language == "iw") "he-IL" else locale.toLanguageTag()
     }
 
-    // Expose a public function to trigger movie loading from the UI.
-    fun loadMovies() {
-        fetchMovies()
-    }
-
-    fun fetchMovies(language: String = getCurrentLanguage(), page: Int = 1) {
+    fun fetchMovies(page: Int = 1) {
         viewModelScope.launch {
             try {
-                val movies = repository.getPopularMovies(language, page)
+                val movies = repository.getPopularMovies(page)
                 _movieList.postValue(movies)
                 _highRatedMovies.postValue(movies.sortedByDescending { it.rating })
                 _newReleasesMovies.postValue(movies.sortedByDescending { it.releaseDate })
                 repository.insertMovies(movies)
+                Log.d("MoviesViewModel", "Movies fetched successfully: ${movies.size}")
             } catch (e: Exception) {
                 Log.e("MoviesViewModel", "Error fetching movies: ${e.localizedMessage}")
                 _movieList.postValue(emptyList())
@@ -83,10 +74,10 @@ class MoviesViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val response = repository.searchMovies(query, getCurrentLanguage())
-                // Use the repository's public conversion function
                 val movies = response.movies.map { repository.convertTMDBMovieToMovie(it) }
                 _movieList.postValue(movies)
                 repository.insertMovies(movies)
+                Log.d("MoviesViewModel", "Search completed: ${movies.size} results")
             } catch (e: Exception) {
                 Log.e("MoviesViewModel", "Error searching movies: ${e.localizedMessage}")
                 _movieList.postValue(emptyList())
@@ -111,6 +102,7 @@ class MoviesViewModel @Inject constructor(
                 val uniqueMovies = allMovies.distinctBy { it.id }
                 _movieList.postValue(uniqueMovies)
                 repository.insertMovies(uniqueMovies)
+                Log.d("MoviesViewModel", "Year range search completed: ${uniqueMovies.size} results")
             } catch (e: Exception) {
                 Log.e("MoviesViewModel", "Error searching movies by year range: ${e.localizedMessage}")
                 _movieList.postValue(emptyList())
@@ -118,34 +110,20 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
-    fun searchMoviesByRegionAndLanguage(region: String, language: String) {
-        Log.d("MoviesViewModel", "Fetching movies for region: $region, language: $language")
+    fun searchMoviesByRegionAndLanguage(language: String) {
+        Log.d("MoviesViewModel", "Fetching movies for language: $language")
         viewModelScope.launch {
             try {
-                val response = repository.getPopularMovies(language, page = 1, region = region)
+                val response = repository.getPopularMovies(page = 1)
                 if (response.isNotEmpty()) {
                     Log.d("MoviesViewModel", "Movies retrieved successfully: ${response.size}")
                     _movieList.postValue(response)
                 } else {
-                    Log.w("MoviesViewModel", "No movies found for region: $region, language: $language")
+                    Log.w("MoviesViewModel", "No movies found for language: $language")
                     _movieList.postValue(emptyList())
                 }
             } catch (e: Exception) {
                 Log.e("MoviesViewModel", "Error fetching movies", e)
-                _movieList.postValue(emptyList())
-            }
-        }
-    }
-
-    fun fetchLocalizedMovies() {
-        viewModelScope.launch {
-            try {
-                val moviesList = repository.getMoviesBasedOnLocale() ?: emptyList()
-                val convertedMovies = moviesList.map { repository.convertTMDBMovieToMovie(it) }
-                _movieList.postValue(convertedMovies)
-                Log.d("MoviesViewModel", "Movies retrieved successfully: ${convertedMovies.size}")
-            } catch (e: Exception) {
-                Log.e("MoviesViewModel", "Error fetching localized movies: ${e.message}")
                 _movieList.postValue(emptyList())
             }
         }
@@ -167,6 +145,7 @@ class MoviesViewModel @Inject constructor(
                 if (movie != null) {
                     val updatedMovie = movie.copy(favorites = isFavorite)
                     repository.updateMovie(updatedMovie)
+                    Log.d("MoviesViewModel", "Favorite status updated for movie: $movieId")
                 }
             } catch (e: Exception) {
                 Log.e("MoviesViewModel", "Error updating favorite status: ${e.localizedMessage}")
