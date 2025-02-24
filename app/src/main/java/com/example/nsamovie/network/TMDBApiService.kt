@@ -20,6 +20,7 @@ interface TMDBApiService {
         @Query("api_key") apiKey: String,
         @Query("query") query: String,
         @Query("language") language: String,
+        @Query("region") region: String? = null,
         @Query("page") page: Int = 1
     ): TMDBMovieResponse
 

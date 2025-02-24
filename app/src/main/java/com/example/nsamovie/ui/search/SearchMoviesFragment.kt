@@ -217,29 +217,7 @@ class SearchMoviesFragment : Fragment() {
         }
     }
 
-    private fun requestNewLocation() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.e("SearchMoviesFragment", "Cannot request new location, permission not granted!")
-            return
-        }
-        val locationRequest = com.google.android.gms.location.LocationRequest.Builder(
-            com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY, 5000
-        ).apply {
-            setWaitForAccurateLocation(true)
-            setMinUpdateIntervalMillis(2000)
-        }.build()
-        val locationCallback = object : com.google.android.gms.location.LocationCallback() {
-            override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
-                val location = locationResult.lastLocation
-                if (location != null) {
-                    Log.d("SearchMoviesFragment", "Fresh location retrieved: Lat=${location.latitude}, Lon=${location.longitude}")
-                    fusedLocationProviderClient.removeLocationUpdates(this)
-                    getLocationAndSearchMovies()
-                }
-            }
-        }
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null)
-    }
+
 
     private fun showLoadingState() {
         binding.apply {

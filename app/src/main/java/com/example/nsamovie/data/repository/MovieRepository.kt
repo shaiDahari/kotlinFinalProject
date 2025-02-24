@@ -41,7 +41,7 @@ class MovieRepository @Inject constructor(
     suspend fun getPopularMovies(page: Int = 1): List<Movie> {
         return try {
             val languageCode = getCurrentLanguage()
-            val region = getRegionCode() // Get region based on locale
+            val region = getRegionCode()
 
             Log.d(TAG, "Fetching movies with language: $languageCode, region: $region")
 
@@ -121,7 +121,8 @@ class MovieRepository @Inject constructor(
 
     suspend fun searchMovies(query: String): TMDBMovieResponse {
         val languageCode = getCurrentLanguage()
-        val response = apiService.searchMovies(apiKey, query, languageCode)
+        val region = getRegionCode()
+        val response = apiService.searchMovies(apiKey, query, languageCode,region)
         val movies = response.movies.map { tmdbMovie ->
             convertTMDBMovieToMovie(tmdbMovie)
         }
