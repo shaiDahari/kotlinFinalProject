@@ -3,7 +3,6 @@ package com.example.nsamovie.network
 import com.example.nsamovie.network.model.TMDBGenreResponse
 import com.example.nsamovie.network.model.TMDBMovieResponse
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TMDBApiService {
@@ -15,13 +14,6 @@ interface TMDBApiService {
         @Query("region") region: String? = null  // Added region parameter
     ): TMDBMovieResponse
 
-    @GET("movie/{movie_id}/recommendations")
-    suspend fun getRecommendedMovies(
-        @Path("movie_id") movieId: Int,
-        @Query("api_key") apiKey: String,
-        @Query("language") language: String,
-        @Query("page") page: Int = 1
-    ): TMDBMovieResponse
 
     @GET("search/movie")
     suspend fun searchMovies(
