@@ -7,13 +7,12 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.Response
 
-
 interface TMDBApiService {
 
     @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("api_key") apiKey: String,
-        @Query("language") language: String = "en-US",  // Default language (fallback)
+        @Query("language") language: String,
         @Query("page") page: Int = 1,
         @Query("region") region: String? = null
     ): TMDBMovieResponse
@@ -22,7 +21,7 @@ interface TMDBApiService {
     suspend fun getRecommendedMovies(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String,
-        @Query("language") language: String = "en-US",  // Default language (fallback)
+        @Query("language") language: String,
         @Query("page") page: Int = 1
     ): TMDBMovieResponse
 
@@ -30,22 +29,20 @@ interface TMDBApiService {
     suspend fun searchMovies(
         @Query("api_key") apiKey: String,
         @Query("query") query: String,
-        @Query("language") language: String = "en-US",  // Default language (fallback)
+        @Query("language") language: String,
         @Query("page") page: Int = 1
     ): TMDBMovieResponse
 
     @GET("genre/movie/list")
     suspend fun getMovieGenres(
         @Query("api_key") apiKey: String,
-        @Query("language") language: String = "en-US"  // Default language (fallback)
+        @Query("language") language: String
     ): TMDBGenreResponse
 
-    // ✅ Added function to fetch movies dynamically based on locale
     @GET("discover/movie")
     suspend fun getMoviesBasedOnLocale(
         @Query("region") region: String?,
         @Query("language") language: String,
         @Query("api_key") apiKey: String
     ): Response<TMDBMovieResponse>
-
 }

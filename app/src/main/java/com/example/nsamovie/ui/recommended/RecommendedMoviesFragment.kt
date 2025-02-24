@@ -14,8 +14,7 @@ import com.example.nsamovie.databinding.FragmentRecommendedMoviesBinding
 import com.example.nsamovie.ui.adapter.SmallMovieAdapter
 import com.example.nsamovie.ui.viewmodel.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-
-
+import java.util.Locale
 
 @AndroidEntryPoint
 class RecommendedMoviesFragment : Fragment() {
@@ -42,8 +41,8 @@ class RecommendedMoviesFragment : Fragment() {
         setupObservers()
         setupListeners()
 
-        val apiKey = getString(R.string.api_key)
-        viewModel.fetchMovies(apiKey)
+        // Fetch localized movies based on system settings
+        viewModel.fetchMovies()
     }
 
     private fun setupRecyclerViews() {
