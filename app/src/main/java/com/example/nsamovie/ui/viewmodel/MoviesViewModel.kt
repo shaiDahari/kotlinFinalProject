@@ -80,7 +80,7 @@ class MoviesViewModel @Inject constructor(
     fun searchMovies(query: String) {
         viewModelScope.launch {
             try {
-                val response = repository.searchMovies(query, getCurrentLanguage())
+                val response = repository.searchMovies(query)
                 val movies = response.movies.map { repository.convertTMDBMovieToMovie(it) }
                 _movieList.postValue(movies)
                 repository.insertMovies(movies)
@@ -97,7 +97,7 @@ class MoviesViewModel @Inject constructor(
             try {
                 val allMovies = mutableListOf<Movie>()
                 for (year in startYear..endYear) {
-                    val response = repository.searchMovies(year.toString(), getCurrentLanguage())
+                    val response = repository.searchMovies(year.toString())
                     val moviesFromYear = response.movies
                         .filter { movie ->
                             val movieYear = movie.releaseDate?.split("-")?.firstOrNull()?.toIntOrNull()

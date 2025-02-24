@@ -120,8 +120,8 @@ class MovieRepository @Inject constructor(
     suspend fun getMovieById(movieId: Int): Movie? = movieDao.getMovieById(movieId)
 
 
-    suspend fun searchMovies(query: String, currentLanguage: String): TMDBMovieResponse {
-        val response = apiService.searchMovies(apiKey, query, language = currentLanguage)
+    suspend fun searchMovies(query: String): TMDBMovieResponse {
+        val response = apiService.searchMovies(apiKey, query, getCurrentLanguage())
         val movies = response.movies.map { tmdbMovie ->
             convertTMDBMovieToMovie(tmdbMovie)
         }
