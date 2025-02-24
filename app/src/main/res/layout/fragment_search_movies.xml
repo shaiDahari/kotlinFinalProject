@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"> <!-- Center content horizontally -->
 
         <!-- Search Bar with Buttons -->
         <androidx.appcompat.widget.Toolbar
@@ -66,27 +68,27 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <!-- RecyclerView -->
+        <!-- RecyclerView (Centered) -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewMovies"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:padding="8dp"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
             android:visibility="gone"/>
 
-        <!-- Empty State -->
+        <!-- Empty State (Centered) -->
         <TextView
             android:id="@+id/emptyStateText"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/search_movies_hint"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:visibility="visible"/>
-
+            android:visibility="visible"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

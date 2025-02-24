@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="8dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,7 +11,8 @@
         android:text="@string/select_year_range"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/white"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +29,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/from_year"/>
+                android:text="@string/from_year"
+                android:textColor="@color/white"/>
 
             <NumberPicker
                 android:id="@+id/startYearPicker"
@@ -46,7 +48,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/to_year"/>
+                android:text="@string/to_year"
+                android:textColor="@color/white"/>
 
             <NumberPicker
                 android:id="@+id/endYearPicker"
@@ -67,13 +70,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@android:string/cancel"
-            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
         <Button
             android:id="@+id/btnApply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/apply"/>
+            android:text="@string/apply"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"/>
     </LinearLayout>
 </LinearLayout>

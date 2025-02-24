@@ -45,6 +45,7 @@
     <string name="not_favorite">לא מועדף</string>
     <string name="gallery_access_required">נדרשת גישה לגלריה לבחירת תמונות</string>
 
+
     <!-- כותרות -->
     <string name="title_add_movie">הוסף סרט</string>
     <string name="title_edit_movie">ערוך סרט</string>
@@ -60,6 +61,8 @@
     <string name="movie_not_found">הסרט לא נמצא</string>
 
     <!-- מחרוזות חיפוש -->
+    <string name="go_to_favorites">למועדפים</string>
+    <string name="movie_details">פריטי הסרט</string>
     <string name="search_movies_hint">הקלד שם סרט לחיפוש</string>
     <string name="no_results_found">לא נמצאו תוצאות</string>
     <string name="select_date">בחר תאריך</string>

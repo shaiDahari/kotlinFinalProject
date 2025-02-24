@@ -59,6 +59,8 @@
     <string name="location">Location</string>
     <string name="new_releases">New Releases</string>
     <string name="movie_not_found">Movie not found</string>
+    <string name="go_to_favorites">Go to Favorites</string>
+    <string name="movie_details">Movie Details</string>
 
     <!-- Search strings -->
     <string name="search_movies_hint">Enter movie name to search</string>
